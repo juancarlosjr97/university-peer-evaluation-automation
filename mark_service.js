@@ -250,7 +250,7 @@ const getAdjustedMarkViewByGroup = (
   dataAdjustedMarkView.push(["Sum of Group Average", sumGroupAvg]);
   dataAdjustedMarkView.push(["Total Submissions", totalStudentSubmissions]);
 
-  dataAdjustedMarkView.push(["Student IDs", ...studentsByGroup]);
+  dataAdjustedMarkView.push(["Student Names", ...studentsByGroup]);
 
   Object.keys(dataSanitised).map((studentId) => {
     dataAdjustedMarkView.push([
