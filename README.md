@@ -14,30 +14,30 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 ## Setup
 
-### 1. Google Cloud Platform (GCP)
+### Google Cloud Platform (GCP)
 
 1. Go to https://console.developers.google.com/ and create a project
 2. Click on `Library` and enable the following APIs:
    - Apps Script API
    - Google Drive API
-3. Go to `OAuth consent screen`
-4. Select as `User Type` the `External` option
+3. Go back to the main menu by clicking on `APIs & Services`, and go to `OAuth consent screen`
+4. Select as `User Type` the `External` option, then click on create
 5. Add an `App name`, and `User support email` and the email on the `Developer contact information`
 6. Click on `Save and continue` on the `Scopes` section
 7. Add your email as a `Test user`, then click on `Save and continue`
-8. After verified the information is correct, click on `Bask to dashboard`
+8. After verified the information is correct, click on `Back to dashboard`
 9. Click on `Publish app`, and then click on `Confirm`
 10. Click on `Project settings` and copy the `Project number` to use later
 
-### 2. Project Spreadsheet Setup
+### Project Spreadsheet Setup
 
-1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit?usp=sharing. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES`.
+1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit?usp=sharing. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
 
 2. Update the sheet `DATA` with the correct data of the students, the names and the student group
 
 3. Clear the data of the sheet `TEAM_GROUP_GRADES` from the second row.
 
-4. Copy the spreadsheet id to use later. For example on the example below:
+4. Copy the spreadsheet id to use later. e.g:
 
 ```bash
 https://docs.google.com/spreadsheets/d/1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY/edit#gid=0
@@ -47,21 +47,21 @@ The ID of the spreadsheet is `1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY`
 
 #### Rules of editing the Project Spreadsheet
 
-- Do not edit the `MASTER_SHEET` cells location, any text can be modified as long the cells are not changing its location. e.g., `Student Name` is `A7` but the text can be modified to `Students`
+- Do not edit the `MASTER_SHEET` cells location, any text can be modified as long the cells are not changing its location. e.g., `Student Name` is `A7` but the text can be modified to `Students` as long the cell continues to be `A7`.
 
-- After pulling data to the `IMPORTED_DATA` sheet, do not make any changes manually to that sheet as it could create issues creating the `ADJUSTED_GRADES`
+- After pulling data to the `IMPORTED_DATA` sheet, do not make any changes manually to that sheet as it could create issues creating the `ADJUSTED_GRADES`.
 
-### 3. Apps Script Project Setup
+### Apps Script Project Setup
 
-1. Open the following link https://script.google.com/d/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the right on `Overview` and then on the `Make a copy` icon
+1. Open the following link https://script.google.com/d/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
 
-2. Change the name of the new Apps Scripts Project
+2. Change the name of the new Apps Script Project by clicking on the `Copy of Template Project - University - Peer Evaluation Automation` name
 
-3. Go to `Project Settings` and on `Google Cloud Platform (GCP) Project` click on `Change project`, and then enter the `Project number` copied from the `Google Cloud Platform` project created
+3. Open the expandable navigation on the far left, and go to `Project Settings` and on `Google Cloud Platform (GCP) Project` click on `Change project`, and then enter the `Project number` copied from the `Google Cloud Platform` project created, and then click on `Set project` to update the `Project number`
 
 4. Navigate to https://script.google.com/home/usersettings and change the `Google Apps Script API` to `On`
 
-5. Navigate to Apps Script project
+5. Navigate to `My Projects`, and open the project just created
 
 6. Open the file `setup.gs`
 
@@ -164,6 +164,10 @@ Go to `https://script.google.com/`, right click on the project and click on `Sha
 2. On the `Test users` section, click on `Add users`
 
 3. Enter the email of the user to share access
+
+### Multiple project setup
+
+TODO
 
 ## Development
 
