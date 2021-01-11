@@ -182,6 +182,8 @@ and a Unix based computer, such Mac or Ubuntu.
 
 ### Installation
 
+TODO
+
 ### Automated Testing
 
 Execute on the Apps Script Project the method `testWebApp`
