@@ -79,7 +79,7 @@ The `MODULE_NAME` will be used to identified the spreadsheets and the Google Dri
 
 12. Click on `Run`
 
-During the first execution, the system will ask for your permissions to execute code on your behalf, as sending emails, cresting files, folders, deleting files.
+During the first execution, the system will ask for your permissions to execute code on your behalf, as sending emails, creating files, folders, deleting files.
 
 For more information about what the system is requesting permissions, visit the following page: https://developers.google.com/apps-script/guides/services/authorization. Additionally, to understand the specifics permissions of this project, go to the `Overview` and see the permissions under `Project OAuth Scopes`
 
