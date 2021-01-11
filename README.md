@@ -67,7 +67,7 @@ The ID of the spreadsheet is `1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY`
 
 7. Replace the value of the constant `MASTER_SPREADSHEET_ID` to the spreadsheet ID created on the `Project Spreadsheet Setup` without deleting the double quotes
 
-8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE` to the date that you would like the system to automatically collect the data
+8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE` to the date that you would like the system to automatically collect the data without deleting the double quotes
 
 9. Update the constant `MODULE_NAME` to the name of your module
 
