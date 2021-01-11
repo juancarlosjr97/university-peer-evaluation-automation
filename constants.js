@@ -1,0 +1,22 @@
+// Do not edit unless you know what you are doing
+
+const MASTER_FORM_WORKSHEET_NAME = "MASTER_SHEET";
+const MASTER_WORKSHEET_IMPORTED_DATA = "IMPORTED_DATA";
+const MASTER_WORKSHEET_DATA = "DATA";
+const MASTER_WORKSHEET_TEAM_GROUP_GRADES = "TEAM_GROUP_GRADES";
+const MASTER_WORKSHEET_ADJUSTED_GRADES = "ADJUSTED_GRADES";
+const UNWANTED_SHEETS = [
+  "DATA",
+  "IMPORTED_DATA",
+  "TEAM_GROUP_GRADES",
+  "ADJUSTED_GRADES",
+];
+const FIRST_ROW_STUDENT_DATA = 8;
+const TEST_DATA = {
+  STUDENT_ID: "TEST",
+  STUDENTS_BY_GROUP_NAME: [
+    ["Student - Test 1"],
+    ["Student - Test 2"],
+    ["Student - Test 3"],
+  ],
+};

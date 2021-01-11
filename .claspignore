@@ -1,0 +1,10 @@
+backups/**
+old/**
+node_modules/**
+.DS_Store
+!src/** 
+!appsscript.json
+!.clasp_original.json
+*.csv
+.git/**
+.history/**

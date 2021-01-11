@@ -1,0 +1,15 @@
+{
+  "name": "university-peer-evaluation-automation",
+  "version": "1.0.0",
+  "description": "University Peer-Evaluation Automation",
+  "repository": "https://github.com/juancarlosjr97/university-peer-evaluation-automation.git",
+  "author": "Juan Carlos Blanco Delgado <juancarlosjr97@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "publish-project": "clasp push -f"
+  },
+  "dependencies": {
+    "@google/clasp": "^2.3.0"
+  }
+}

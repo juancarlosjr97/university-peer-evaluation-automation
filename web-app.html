@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      html {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(#141e30, #243b55);
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #b62e5f;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      /* button:disabled,
+      button[disabled] {
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
+      } */
+
+      .container {
+        padding: 16px;
+      }
+
+      .url-container {
+        padding: 5px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto;
+        border: 1px solid #888;
+        width: 250px;
+      }
+
+      .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s;
+      }
+
+      h2 {
+        margin: 15px 0 10px;
+        padding: 0;
+        color: #000;
+        text-align: center;
+      }
+
+      @-webkit-keyframes animatezoom {
+        from {
+          -webkit-transform: scale(0);
+        }
+
+        to {
+          -webkit-transform: scale(1);
+        }
+      }
+
+      @keyframes animatezoom {
+        from {
+          transform: scale(0);
+        }
+
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .buttonload {
+        background-color: #b62e5f;
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+      }
+
+      .fa {
+        margin-left: -12px;
+        margin-right: 8px;
+      }
+    </style>
+  </head>
+
+  <script>
+    const onStudentIdInput = () => {
+      let studentId = Number(document.getElementById("studentId").value);
+      document.getElementById("continueButton").disabled = studentId
+        ? false
+        : true;
+    };
+
+    const onPeerEvaluationModuleClick = () => {
+      let studentId = Number(document.getElementById("studentId").value);
+      if (
+        window.confirm(
+          "Click ok to be redirect to your peer-evaluation spreadsheet."
+        )
+      ) {
+        changeButtonLoadingStatus("block", "none");
+
+        google.script.run
+          .withSuccessHandler(redirectUser)
+          .withFailureHandler(errorCreatingSheet)
+          .createStudentSheetByStudentId(studentId);
+      }
+    };
+
+    const errorCreatingSheet = (error) => {
+      changeButtonLoadingStatus("none", "block");
+
+      alert("Your Student ID does not exist or already used.");
+    };
+
+    const redirectUser = (sheetUrl) => {
+      changeButtonLoadingStatus("none", "block");
+
+      document.getElementById("peerEvaluation").style.display = "block";
+      document.getElementById("peerEvaluationUrl").href = sheetUrl;
+      document
+        .getElementById("peerEvaluationUrl")
+        .setAttribute("href", sheetUrl);
+    };
+
+    const changeButtonLoadingStatus = (
+      buttonLoadDisplay,
+      continueButtonDisplay
+    ) => {
+      document.getElementById("buttonload").style.display = buttonLoadDisplay;
+      document.getElementById(
+        "continueButton"
+      ).style.display = continueButtonDisplay;
+    };
+  </script>
+  <body>
+    <div id="id01" style="display: block" class="modal">
+      <form class="modal-content animate">
+        <h2>
+          Peer-Evaluation Module
+          <?= MODULE_NAME ?>
+        </h2>
+        <div class="container">
+          <label for="sId"><b>Student ID</b></label>
+          <input
+            id="studentId"
+            type="number"
+            placeholder="Enter your Student ID"
+            name="sId"
+            required
+            oninput="onStudentIdInput()"
+          />
+
+          <button
+            disabled
+            type="button"
+            onclick="onPeerEvaluationModuleClick()"
+            id="continueButton"
+          >
+            Continue
+          </button>
+
+          <button
+            style="display: none"
+            id="buttonload"
+            disabled
+            class="buttonload"
+          >
+            <i class="fa fa-spinner fa-spin"></i>Loading
+          </button>
+        </div>
+        <div class="url-container" style="background-color: #f1f1f1">
+          <div id="peerEvaluation" style="display: none">
+            <h2 id="peerEvaluationUrlHeader">
+              Click here to open Peer-Evaluation:
+              <a target="_blank" href="" id="peerEvaluationUrl">URL</a>
+            </h2>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
