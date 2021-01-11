@@ -37,13 +37,7 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 3. Clear the data of the sheet `TEAM_GROUP_GRADES` from the second row.
 
-4. Copy the spreadsheet id to use later. e.g:
-
-```bash
-https://docs.google.com/spreadsheets/d/1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY/edit#gid=0
-```
-
-The ID of the spreadsheet is `1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY`
+4. Copy the whole spreadsheet url to use later.
 
 #### Rules of editing the Project Spreadsheet
 
@@ -65,15 +59,15 @@ The ID of the spreadsheet is `1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY`
 
 6. Open the file `setup.gs`
 
-7. Replace the value of the constant `MASTER_SPREADSHEET_ID` to the spreadsheet ID created on the `Project Spreadsheet Setup` without deleting the double quotes
+7. Replace the value of the constant `MASTER_SPREADSHEET_URL` to the spreadsheet ID created on the `Project Spreadsheet Setup` without deleting the double quotes
 
 8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE` to the date that you would like the system to automatically collect the data without deleting the double quotes
 
 9. Update the constant `MODULE_NAME` to the name of your module
 
-10. Update the constant `GDRIVE_FOLDER_NAME`. Do not delete the `${MODULE_NAME}` unless you know what you are doing. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project.
+10. Update the constant `GDRIVE_FOLDER_NAME`. Do not delete the `${MODULE_NAME}` unless you know what you are doing. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project
 
-The `MODULE_NAME` will be used to identified the spreadsheets and the Google Drive folder.
+The constant `MODULE_NAME` will be used to identified the spreadsheets and the Google Drive folder.
 
 11. Update the constant `EMAIL_NOTIFICATIONS` using a comma separated emails following the example
 

@@ -13,7 +13,7 @@ const removeFileById = (fileId) => {
 const createStudentSheetByStudentId = (studentId) => {
   let studentsData = getStudentsNameByGroup(studentId);
 
-  let sheet = SpreadsheetApp.openById(MASTER_SPREADSHEET_ID);
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
   let newStudentSheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
   let newStudentSheet = sheet.copy(`${newStudentSheetName} - Temp`);
 
@@ -75,7 +75,7 @@ const setFileSharingToPublic = (file) => {
 };
 
 const saveStudentSheetOnCentralData = (studentRow, newStudentSheetUrl) => {
-  let sheet = SpreadsheetApp.openById(MASTER_SPREADSHEET_ID).getSheetByName(
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL).getSheetByName(
     MASTER_WORKSHEET_DATA
   );
   sheet.getRange(`D${studentRow + 1}`).setValue(newStudentSheetUrl);
@@ -94,7 +94,7 @@ const setStudentsNameByGroup = (sheet, allStudentsNameByGroup) => {
 };
 
 const getStudentsNameByGroup = (studentId) => {
-  let sheet = SpreadsheetApp.openById(MASTER_SPREADSHEET_ID);
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
   let data = sheet
     .getSheetByName(MASTER_WORKSHEET_DATA)
     .getDataRange()
@@ -175,7 +175,7 @@ const getAllPeerEvaluationData = () => {
   });
 
   let importDataSheet = SpreadsheetApp.openById(
-    MASTER_SPREADSHEET_ID
+    MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_IMPORTED_DATA);
 
   importDataSheet.getRange("A2:J").clearContent();
@@ -260,7 +260,7 @@ const deletePeerEvaluationFiles = () => {
     removeFileById(sheetId);
   });
   let masterSheet = SpreadsheetApp.openById(
-    MASTER_SPREADSHEET_ID
+    MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_DATA);
 
   masterSheet.getRange("D2:D").clearContent();

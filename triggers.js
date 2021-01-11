@@ -2,7 +2,7 @@ const createMasterTriggerMenuOnOpen = () => {
   let triggerFunction = "onOpenMasterSheet";
   deleteProjectTriggersByName(triggerFunction);
 
-  let sheet = SpreadsheetApp.openById(MASTER_SPREADSHEET_ID);
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
   ScriptApp.newTrigger("onOpenMasterSheet")
     .forSpreadsheet(sheet)
     .onOpen()

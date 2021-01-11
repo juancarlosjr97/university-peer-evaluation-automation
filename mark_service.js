@@ -291,21 +291,21 @@ const getTotalStudentSubmissions = (studentSubmitted) => {
 };
 
 const getPeerEvaluationDataImported = () => {
-  return SpreadsheetApp.openById(MASTER_SPREADSHEET_ID)
+  return SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL)
     .getSheetByName(MASTER_WORKSHEET_IMPORTED_DATA)
     .getDataRange()
     .getValues();
 };
 
 const getStudentsData = () => {
-  return SpreadsheetApp.openById(MASTER_SPREADSHEET_ID)
+  return SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL)
     .getSheetByName(MASTER_WORKSHEET_DATA)
     .getDataRange()
     .getValues();
 };
 
 const getGroupGradesAndData = () => {
-  return SpreadsheetApp.openById(MASTER_SPREADSHEET_ID)
+  return SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL)
     .getSheetByName(MASTER_WORKSHEET_TEAM_GROUP_GRADES)
     .getDataRange()
     .getValues();
@@ -358,7 +358,7 @@ const getAdjustedMarks = () => {
   adjustedMarkViewByGroup = fixUnevenData(adjustedMarkViewByGroup);
 
   let adjustedDataWorksheet = SpreadsheetApp.openById(
-    MASTER_SPREADSHEET_ID
+    MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_ADJUSTED_GRADES);
 
   adjustedDataWorksheet.getDataRange().clearContent();
