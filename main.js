@@ -106,7 +106,7 @@ const getStudentsNameByGroup = (studentId) => {
   let studentSheet;
 
   for (x = 1; x < data.length; x++) {
-    if (data[x][1] === studentId) {
+    if (Number(data[x][1]) === Number(studentId)) {
       studentName = data[x][0];
       studentGroup = data[x][2];
       studentSheet = data[x][3];
@@ -174,7 +174,7 @@ const getAllPeerEvaluationData = () => {
     allDataSheets.push(...sheetDataSantinised);
   });
 
-  let importDataSheet = SpreadsheetApp.openById(
+  let importDataSheet = SpreadsheetApp.openByUrl(
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_IMPORTED_DATA);
 
@@ -259,7 +259,7 @@ const deletePeerEvaluationFiles = () => {
   sheetIds.map((sheetId) => {
     removeFileById(sheetId);
   });
-  let masterSheet = SpreadsheetApp.openById(
+  let masterSheet = SpreadsheetApp.openByUrl(
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_DATA);
 

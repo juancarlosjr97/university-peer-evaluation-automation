@@ -41,13 +41,6 @@
         opacity: 0.8;
       }
 
-      /* button:disabled,
-      button[disabled] {
-        border: 1px solid #999999;
-        background-color: #cccccc;
-        color: #666666;
-      } */
-
       .container {
         padding: 16px;
       }
@@ -134,18 +127,13 @@
 
     const onPeerEvaluationModuleClick = () => {
       let studentId = Number(document.getElementById("studentId").value);
-      if (
-        window.confirm(
-          "Click ok to be redirect to your peer-evaluation spreadsheet."
-        )
-      ) {
-        changeButtonLoadingStatus("block", "none");
 
-        google.script.run
-          .withSuccessHandler(redirectUser)
-          .withFailureHandler(errorCreatingSheet)
-          .createStudentSheetByStudentId(studentId);
-      }
+      changeButtonLoadingStatus("block", "none");
+
+      google.script.run
+        .withSuccessHandler(redirectUser)
+        .withFailureHandler(errorCreatingSheet)
+        .createStudentSheetByStudentId(studentId);
     };
 
     const errorCreatingSheet = (error) => {
@@ -178,7 +166,6 @@
     <div id="id01" style="display: block" class="modal">
       <form class="modal-content animate">
         <h2>
-          Peer-Evaluation Module
           <?= MODULE_NAME ?>
         </h2>
         <div class="container">
@@ -213,7 +200,7 @@
         <div class="url-container" style="background-color: #f1f1f1">
           <div id="peerEvaluation" style="display: none">
             <h2 id="peerEvaluationUrlHeader">
-              Click here to open Peer-Evaluation:
+              Click here to open Peer Evaluation:
               <a target="_blank" href="" id="peerEvaluationUrl">URL</a>
             </h2>
           </div>

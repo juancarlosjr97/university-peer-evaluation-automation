@@ -84,7 +84,7 @@ const getSumAndAvgGroup = (avgByStudentIndividually) => {
 
   return {
     sumGroupAvg,
-    avgByGroup,
+    avgByGroup: avgByGroup.toFixed(2),
   };
 };
 
@@ -95,7 +95,7 @@ const getTotalGroupPeerAvgByStudents = (
   const totalGroupPeerAvgByStudents = [];
 
   avgByStudentIndividually.map((avgByStudent) => {
-    totalGroupPeerAvgByStudents.push(avgByStudent / sumGroupAvg);
+    totalGroupPeerAvgByStudents.push((avgByStudent / sumGroupAvg).toFixed(2));
   });
 
   return totalGroupPeerAvgByStudents;
@@ -128,7 +128,7 @@ const getAdjustedMark = (
       gradeAdjusted = 100;
     }
 
-    adjustedMarkPeerStudent.push(gradeAdjusted);
+    adjustedMarkPeerStudent.push(gradeAdjusted.toFixed(2));
   });
 
   if (adjustedMarkPeerStudent.length) {
@@ -184,7 +184,11 @@ const getAdjustedMarkByGroupData = (
 
     totalGroupPeerAvgByStudents.map((totalTeamPeerAvgByStudent) => {
       preAdjustedMarkPeerStudents.push(
-        totalTeamPeerAvgByStudent * totalStudentSubmitted * groupProjectMark
+        (
+          totalTeamPeerAvgByStudent *
+          totalStudentSubmitted *
+          groupProjectMark
+        ).toFixed(2)
       );
     });
 
@@ -357,7 +361,7 @@ const getAdjustedMarks = () => {
 
   adjustedMarkViewByGroup = fixUnevenData(adjustedMarkViewByGroup);
 
-  let adjustedDataWorksheet = SpreadsheetApp.openById(
+  let adjustedDataWorksheet = SpreadsheetApp.openByUrl(
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_ADJUSTED_GRADES);
 

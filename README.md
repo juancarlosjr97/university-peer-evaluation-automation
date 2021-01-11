@@ -51,21 +51,21 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 2. Change the name of the new Apps Script Project by clicking on the `Copy of Template Project - University - Peer Evaluation Automation` name
 
-3. Open the expandable navigation on the far left, and go to `Project Settings` and on `Google Cloud Platform (GCP) Project` click on `Change project`, and then enter the `Project number` copied from the `Google Cloud Platform` project created, and then click on `Set project` to update the `Project number`
+3. Open the expandable navigation on the far left, and go to `Project Settings` and on `Google Cloud Platform (GCP) Project` click on `Change project`, and then enter the `Project number` copied from the `Google Cloud Platform` project created earlier, and then click on `Set project` to update the `Project number`
 
-4. Navigate to https://script.google.com/home/usersettings and change the `Google Apps Script API` to `On`
+4. Navigate to https://script.google.com/home/usersettings and change the `Google Apps Script API` to `On`. You can skip this step if you have already done it before
 
-5. Navigate to `My Projects`, and open the project just created
+5. Navigate to `My Projects`, and open the project just created. If you skipped the step 4, open the expandable navigation on the far left, and go to `Editor`
 
-6. Open the file `setup.gs`
+6. Open the file `setup.gs`. Do not make any other changes to any other file unless you know what you are doing.
 
-7. Replace the value of the constant `MASTER_SPREADSHEET_URL` to the spreadsheet ID created on the `Project Spreadsheet Setup` without deleting the double quotes
+7. Replace the value of the constant `MASTER_SPREADSHEET_URL` to the spreadsheet URL created on the `Project Spreadsheet Setup` without deleting the double quotes
 
 8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE` to the date that you would like the system to automatically collect the data without deleting the double quotes
 
-9. Update the constant `MODULE_NAME` to the name of your module
+9. Update the constant `MODULE_NAME` to your module name and the title of the Web App
 
-10. Update the constant `GDRIVE_FOLDER_NAME`. Do not delete the `${MODULE_NAME}` unless you know what you are doing. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project
+10. Update the constant `GDRIVE_FOLDER_NAME`. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project
 
 The constant `MODULE_NAME` will be used to identified the spreadsheets and the Google Drive folder.
 
@@ -73,15 +73,15 @@ The constant `MODULE_NAME` will be used to identified the spreadsheets and the G
 
 12. Click on `Run`
 
-During the first execution, the system will ask for your permissions to execute code on your behalf, as sending emails, creating files, folders, deleting files.
+During the first execution, the system will ask for your permissions to execute code on your behalf, as sending emails, creating/deleting files/folders.
 
 For more information about what the system is requesting permissions, visit the following page: https://developers.google.com/apps-script/guides/services/authorization. Additionally, to understand the specifics permissions of this project, go to the `Overview` and see the permissions under `Project OAuth Scopes`
 
 13. Click on `Review permissions`
 
-14. Select the account added as a `Test user` during the `GCP` setup
+14. Select the account added as a `Test user` during the `Google Cloud Platform` setup
 
-15. If appears a page with a title `Google hasn't verified this app`, click on `Advance` and then on `Go to PROJECT_NAME (unsafe)`
+15. If appears a page with a title `Google hasn't verified this app`, click on `Advance` and then on `Go to PROJECT_NAME (unsafe)`. For more information about the information about `Google hasn't verified this app` visit the following link: https://support.google.com/cloud/answer/7454865?hl=en
 
 The following page will show all the permissions that the system is requesting access to execute on your Apps Script project
 
@@ -124,7 +124,7 @@ To check if everything was executed correctly, the `Execution log` will reflect 
 - Average by Group score = Avg of all scores given to the team
 - Sum of Group Average = Sum of all scores averages give to a student
 - Student mark/total team = Avg score by student / Sum of all scores averages give to a student
-- Preadjusted project mark = Student mark/total team _ Total Submissions _ Group Project Mark
+- Preadjusted project mark = Student mark/total team *Total Submissions *Group Project Mark
 - Adjusted/Final mark = Preadjusted project mark +/- 10 group mark. Not lower than 0 or higher than 100
 
 ### Sharing Access

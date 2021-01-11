@@ -6,7 +6,7 @@ const COLLECT_DATA_TRIGGER_DATE = {
   YEAR: "2021",
 };
 const MODULE_NAME = "Test";
-const GDRIVE_FOLDER_NAME = `University - Lecturer - Module ${MODULE_NAME}`;
+const GDRIVE_FOLDER_NAME = `University - Lecturer - Module`;
 const WORKSHEET_NAME_TEMPLATE = `Module ${MODULE_NAME}`;
 const EMAIL_NOTIFICATIONS = "example1@email.com,example2@email.com";
 
