@@ -71,7 +71,7 @@ The ID of the spreadsheet is `1Ws9-E204EvCSYgIf-v_2KCr5Ln3uf_IWTEpgM3B27lY`
 
 9. Update the constant `MODULE_NAME` to the name of your module
 
-10. Update the constant `GDRIVE_FOLDER_NAME`. Do not delete the `${MODULE_NAME}` unless you know what you are doing
+10. Update the constant `GDRIVE_FOLDER_NAME`. Do not delete the `${MODULE_NAME}` unless you know what you are doing. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project.
 
 The `MODULE_NAME` will be used to identified the spreadsheets and the Google Drive folder.
 
