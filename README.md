@@ -14,7 +14,9 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 ## Setup
 
-### Google Cloud Platform (GCP)
+It is recommend to read the entirely document before proceeding with the setup.
+
+### Part 1. Google Cloud Platform (GCP)
 
 1. Go to https://console.developers.google.com/ and create a project
 2. Click on `Library` and enable the following APIs:
@@ -29,7 +31,7 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 9. Click on `Publish app`, and then click on `Confirm`
 10. Click on `Project settings` and copy the `Project number` to use later
 
-### Project Spreadsheet Setup
+### Part 2. Project Spreadsheet Setup
 
 1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit?usp=sharing. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
 
@@ -45,7 +47,7 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 - After pulling data to the `IMPORTED_DATA` sheet, do not make any changes manually to that sheet as it could create issues creating the `ADJUSTED_GRADES`.
 
-### Apps Script Project Setup
+### Part 3. Apps Script Project Setup
 
 1. Open the following link https://script.google.com/d/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
 
@@ -127,9 +129,9 @@ To check if everything was executed correctly, the `Execution log` will reflect 
 - Preadjusted project mark = Student mark/total team *Total Submissions *Group Project Mark
 - Adjusted/Final mark = Preadjusted project mark +/- 10 group mark. Not lower than 0 or higher than 100
 
-### Sharing Access
+## Sharing Access
 
-#### Data
+### Data
 
 By sharing access to the data, those invited will not be able to execute the `Manual triggers` to collect data or get the adjusted marks.
 
@@ -143,15 +145,15 @@ Go to the project spreadsheet, click on `Share`, enter the email of the person t
 
 2. Right click on the folder, and click on `Share` and enter the email of the person to share. Select either `Editor` or `Viewer` depending on the access require to the project Google Drive folder.
 
-#### Manual Triggers
+### Manual Triggers
 
 By sharing access will allow to those invited to execute the `Manual triggers` on the project spreadsheet.
 
-##### Apps Script Project
+#### Apps Script Project
 
 Go to `https://script.google.com/`, right click on the project and click on `Share`. Select either `Editor` or `Viewer` depending on the access require to the Apps Script project. It is recommended to only share `Viewer` access to the Apps Script project to avoid unwanted changes to the code.
 
-##### GCP Project
+#### GCP Project
 
 1. Copy the GCP project number used and replace the `PROJECT_NUMBER` on the following url: `https://console.developers.google.com/apis/credentials/consent?projectid=PROJECT_NUMBER`
 
@@ -159,9 +161,9 @@ Go to `https://script.google.com/`, right click on the project and click on `Sha
 
 3. Enter the email of the user to share access
 
-### Multiple project setup
+## Multiple project setup
 
-TODO
+In order to setup multiple project, repeat the Part 2 and 3 of the setup using the `Project number` of the `GCP` project created the first time. The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
 
 ## Development
 
@@ -178,13 +180,28 @@ We need to have installed the following services:
 
 and a Unix based computer, such Mac or Ubuntu.
 
-### Installation
+### Installation Local Development
 
-TODO
+#### Source Code
+
+We need to clone the repositories in our local environment:
+
+```bash
+git clone git@github.com:juancarlosjr97/university-peer-evaluation-automation.git
+```
+
+#### Apps Script project setup
+
+Create an empty Apps Script project or copy the ScripsId to add it using the setup script.
+
+```
+cd path/to/project
+bash setup.sh $SCRIPT_ID
+```
 
 ### Automated Testing
 
-Execute on the Apps Script Project the method `testWebApp`
+Execute on the Apps Script Project the method `testWebApp`.
 
 ### Development Roadmap
 
