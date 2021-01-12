@@ -163,7 +163,9 @@ Go to `https://script.google.com/`, right click on the project and click on `Sha
 
 ## Multiple project setup
 
-In order to setup multiple project, repeat the Part 2 and 3 of the setup using the `Project number` of the `GCP` project created the first time. The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
+In order to setup multiple project, repeat the Part 2 and 3 of the setup using the `Project number` of the `GCP` project created the first time.
+
+The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
 
 ## Development
 
