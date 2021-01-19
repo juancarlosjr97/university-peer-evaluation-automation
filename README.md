@@ -16,6 +16,10 @@ If a student has already created a spreadsheet for peer-evaluation, it cannot ac
 
 It is recommend to read the entirely document before proceeding with the setup.
 
+### Prerequisite
+
+We need to have access to a Google account with Google Drive enabled
+
 ### Part 1. Google Cloud Platform (GCP)
 
 1. Go to https://console.developers.google.com/ and create a project
