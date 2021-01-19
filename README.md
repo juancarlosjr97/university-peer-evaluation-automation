@@ -59,7 +59,7 @@ It is recommend to read the entirely document before proceeding with the setup.
 
 5. Navigate to `My Projects`, and open the project just created. If you skipped the step 4, open the expandable navigation on the far left, and go to `Editor`
 
-6. Open the file `setup.gs`. Do not make any other changes to any other file unless you know what you are doing.
+6. Open the file `app_setup.gs`. Do not make any other changes to any other file unless you know what you are doing.
 
 7. Replace the value of the constant `MASTER_SPREADSHEET_URL` to the spreadsheet URL created on the `Project Spreadsheet Setup` without deleting the double quotes
 
