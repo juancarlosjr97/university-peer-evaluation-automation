@@ -131,25 +131,19 @@
       changeButtonLoadingStatus("block", "none");
 
       google.script.run
-        .withSuccessHandler(redirectUser)
-        .withFailureHandler(errorCreatingSheet)
+        .withSuccessHandler(successRequestingStudentSheet)
+        .withFailureHandler(errorCreatingStudentSheet)
         .createStudentSheetByStudentId(studentId);
     };
 
-    const errorCreatingSheet = (error) => {
+    const errorCreatingStudentSheet = (error) => {
       changeButtonLoadingStatus("none", "block");
-
-      alert("Your Student ID does not exist or already used.");
+      alert("Error creating your peer evaluation sheet. Contact your lecturer.");
     };
 
-    const redirectUser = (sheetUrl) => {
+    const successRequestingStudentSheet = () => {
       changeButtonLoadingStatus("none", "block");
-
       document.getElementById("peerEvaluation").style.display = "block";
-      document.getElementById("peerEvaluationUrl").href = sheetUrl;
-      document
-        .getElementById("peerEvaluationUrl")
-        .setAttribute("href", sheetUrl);
     };
 
     const changeButtonLoadingStatus = (
@@ -200,10 +194,7 @@
         <div class="url-container" style="background-color: #f1f1f1">
           <div id="peerEvaluation" style="display: none">
             <h2 id="peerEvaluationUrlHeader">
-              Click on this URL to open the:
-              <a target="_blank" href="" id="peerEvaluationUrl"
-                >Peer Evaluation Form.</a
-              >
+              Your peer evaluation sheet has been sent to your student email.
             </h2>
           </div>
         </div>

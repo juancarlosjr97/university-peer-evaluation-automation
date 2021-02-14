@@ -1,4 +1,4 @@
-# University Peer Evaluation Automation
+# University Peer Evaluation Automation v1.0.1
 
 This repository contains the code of the University Peer Evaluation Automation that runs on Apps Script using `V8` Runtime.
 
@@ -171,6 +171,12 @@ In order to setup multiple project, repeat the Part 2 and 3 of the setup using t
 
 The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
 
+## Update
+
+TBC
+
+Regardless of the update, the GCP project does not have to be recreated.
+
 ## Development
 
 Follow this section if you would like to contribute to this project by editing the code.
@@ -211,6 +217,6 @@ Execute on the Apps Script Project the method `testWebApp`.
 
 ### Development Roadmap
 
-- [ ] Sending automatic email to the student with the link to the spreadsheet after its creation
+- [x] Sending automatic email to the student with the link to the spreadsheet after its creation or t to recover access - v1.0.1
 - [ ] Formatting the `ADJUSTED_GRADES` sheet instead of plain text
 - [ ] Semantic releases

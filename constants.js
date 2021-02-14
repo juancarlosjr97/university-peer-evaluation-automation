@@ -12,11 +12,3 @@ const UNWANTED_SHEETS = [
   "ADJUSTED_GRADES",
 ];
 const FIRST_ROW_STUDENT_DATA = 8;
-const TEST_DATA = {
-  STUDENT_ID: "TEST",
-  STUDENTS_BY_GROUP_NAME: [
-    ["Student - Test 1"],
-    ["Student - Test 2"],
-    ["Student - Test 3"],
-  ],
-};

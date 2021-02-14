@@ -13,61 +13,84 @@ const removeFileById = (fileId) => {
 const createStudentSheetByStudentId = (studentId) => {
   let studentsData = getStudentsNameByGroup(studentId);
 
-  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
-  let newStudentSheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
-  let newStudentSheet = sheet.copy(`${newStudentSheetName} - Temp`);
+  if (!studentsData.sheetExist) {
+    let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
+    let newStudentSheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
+    let newStudentSheet = sheet.copy(`${newStudentSheetName} - Temp`);
 
-  removeUnwantedWorksheet(newStudentSheet);
-  newStudentSheet = getStudentSheetWithCleanHistory(
-    newStudentSheet,
-    newStudentSheetName
-  );
-
-  if (studentId === TEST_DATA.STUDENT_ID) {
-    setStudentsNameByGroup(newStudentSheet, TEST_DATA.STUDENTS_BY_GROUP_NAME);
-  } else {
-    setStudentsNameByGroup(
+    removeUnwantedWorksheet(newStudentSheet);
+    newStudentSheet = getStudentSheetWithCleanHistory(
       newStudentSheet,
-      studentsData.allStudentsNameByGroup
+      newStudentSheetName
     );
+
+    if (studentId === TEST_DATA.STUDENT_ID) {
+      setStudentsNameByGroup(newStudentSheet, TEST_DATA.STUDENTS_BY_GROUP_NAME);
+    } else {
+      setStudentsNameByGroup(
+        newStudentSheet,
+        studentsData.allStudentsNameByGroup
+      );
+    }
+
+    let file = DriveApp.getFileById(newStudentSheet.getId());
+    let folderId = null;
+
+    try {
+      let folders = DriveApp.getFoldersByName(GDRIVE_FOLDER_NAME);
+      folderId = folders.next();
+    } catch (err) {
+      folderId = DriveApp.createFolder(GDRIVE_FOLDER_NAME);
+    }
+
+    file.moveTo(folderId);
+    setFileSharingToPublic(file);
+
+    let newSpreadsheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
+
+    renameSheet(
+      newStudentSheet,
+      MASTER_FORM_WORKSHEET_NAME,
+      newSpreadsheetName
+    );
+    writeOnCellStudentId(newStudentSheet, newSpreadsheetName, studentId);
+    writeOnCellGroupName(
+      newStudentSheet,
+      newSpreadsheetName,
+      studentsData.studentGroup
+    );
+    writeOnCellStudentName(
+      newStudentSheet,
+      newSpreadsheetName,
+      studentsData.studentName
+    );
+    writeOnCellTodayDate(newStudentSheet, newSpreadsheetName);
+
+    let newStudentSheetUrl = newStudentSheet.getUrl();
+
+    if (studentId !== TEST_DATA.STUDENT_ID) {
+      saveStudentSheetOnCentralData(
+        studentsData.studentRow,
+        newStudentSheetUrl
+      );
+    }
+
+    studentsData.studentSheet = newStudentSheetUrl;
   }
 
-  let file = DriveApp.getFileById(newStudentSheet.getId());
-  let folderId = null;
+  sendEmailHtml(
+    studentsData.studentEmail,
+    `Peer evaluation - ${MODULE_NAME}`,
+    `Hi ${studentsData.studentName},
 
-  try {
-    let folders = DriveApp.getFoldersByName(GDRIVE_FOLDER_NAME);
-    folderId = folders.next();
-  } catch (err) {
-    folderId = DriveApp.createFolder(GDRIVE_FOLDER_NAME);
-  }
+Your peer evaluation sheet is: ${studentsData.studentSheet}
 
-  file.moveTo(folderId);
-  setFileSharingToPublic(file);
+Thanks,
 
-  let newSpreadsheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
-
-  renameSheet(newStudentSheet, MASTER_FORM_WORKSHEET_NAME, newSpreadsheetName);
-  writeOnCellStudentId(newStudentSheet, newSpreadsheetName, studentId);
-  writeOnCellGroupName(
-    newStudentSheet,
-    newSpreadsheetName,
-    studentsData.studentGroup
+Module ${MODULE_NAME} Automation.`
   );
-  writeOnCellStudentName(
-    newStudentSheet,
-    newSpreadsheetName,
-    studentsData.studentName
-  );
-  writeOnCellTodayDate(newStudentSheet, newSpreadsheetName);
 
-  let newStudentSheetUrl = newStudentSheet.getUrl();
-
-  if (studentId !== TEST_DATA.STUDENT_ID) {
-    saveStudentSheetOnCentralData(studentsData.studentRow, newStudentSheetUrl);
-  }
-
-  return newStudentSheetUrl;
+  return null;
 };
 
 const setFileSharingToPublic = (file) => {
@@ -78,7 +101,7 @@ const saveStudentSheetOnCentralData = (studentRow, newStudentSheetUrl) => {
   let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL).getSheetByName(
     MASTER_WORKSHEET_DATA
   );
-  sheet.getRange(`D${studentRow + 1}`).setValue(newStudentSheetUrl);
+  sheet.getRange(`E${studentRow + 1}`).setValue(newStudentSheetUrl);
 };
 
 const setStudentsNameByGroup = (sheet, allStudentsNameByGroup) => {
@@ -102,14 +125,17 @@ const getStudentsNameByGroup = (studentId) => {
 
   let studentGroup = null;
   let studentName = null;
+  let studentEmail = null;
   let studentRow = null;
-  let studentSheet;
+  let studentSheet = null;
+  let sheetExist = null;
 
   for (x = 1; x < data.length; x++) {
     if (Number(data[x][1]) === Number(studentId)) {
       studentName = data[x][0];
       studentGroup = data[x][2];
-      studentSheet = data[x][3];
+      studentEmail = data[x][3];
+      studentSheet = data[x][4];
       studentRow = x;
       break;
     }
@@ -124,13 +150,16 @@ const getStudentsNameByGroup = (studentId) => {
   }
 
   if (typeof studentSheet === "string" && studentSheet.length) {
-    throw "Student ID already used.";
+    sheetExist = true;
   }
 
   return {
     studentId,
     studentName,
+    studentEmail,
     studentRow,
+    sheetExist,
+    studentSheet,
     studentGroup,
     allStudentsNameByGroup,
   };
@@ -199,8 +228,12 @@ const getAllPeerEvaluationData = () => {
   return allDataSheets;
 };
 
-const sendEmail = (subject, message) => {
-  MailApp.sendEmail(EMAIL_NOTIFICATIONS, subject, message);
+const sendEmail = (to, subject, message) => {
+  MailApp.sendEmail(to, subject, message);
+};
+
+const sendEmailHtml = (to, subject, htmlBody) => {
+  MailApp.sendEmail(to, subject, htmlBody);
 };
 
 const getSheetDataSanitised = (sheetData) => {
@@ -263,7 +296,7 @@ const deletePeerEvaluationFiles = () => {
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_DATA);
 
-  masterSheet.getRange("D2:D").clearContent();
+  masterSheet.getRange("E2:E").clearContent();
 };
 
 const getTodayDate = () => {

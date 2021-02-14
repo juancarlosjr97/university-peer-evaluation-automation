@@ -16,6 +16,7 @@ const webAppSetup = () => {
   Logger.log(`Web app URL: ${newDeploymentURL}`);
 
   sendEmail(
+    EMAIL_NOTIFICATIONS,
     `Web app created successfully - ${GDRIVE_FOLDER_NAME}`,
     `The web app URL is: ${newDeploymentURL}.`
   );
