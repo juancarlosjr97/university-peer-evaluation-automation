@@ -171,11 +171,11 @@ In order to setup multiple project, repeat the Part 2 and 3 of the setup using t
 
 The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
 
-## Update
+## Update to latest version
 
-TBC
+Regardless of the update, a GCP project does not have to be recreated, it can be reused.
 
-Regardless of the update, the GCP project does not have to be recreated.
+Due to limitations of Google App Scripts, to update the system follow the [second](#part-2-project-spreadsheet-setup) and the [third](#part-3-apps-script-project-setup) step to update the spreadsheet.
 
 ## Development
 
