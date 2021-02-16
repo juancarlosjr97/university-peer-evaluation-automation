@@ -1,4 +1,4 @@
-# University Peer Evaluation Automation v1.0.1
+# University Peer Evaluation Automation v1.0.2
 
 This repository contains the code of the University Peer Evaluation Automation that runs on Apps Script using `V8` Runtime.
 
@@ -37,7 +37,7 @@ We need to have access to a Google account with Google Drive enabled
 
 ### Part 2. Project Spreadsheet Setup
 
-1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit?usp=sharing. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
+1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1kq3DTeuo7oBURsDEE0pgs1CIsYshnYvj9xCji1dlkFM/edit?usp=sharing. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
 
 2. Update the sheet `DATA` with the correct data of the students, name, email and the student group
 
@@ -53,7 +53,7 @@ We need to have access to a Google account with Google Drive enabled
 
 ### Part 3. Apps Script Project Setup
 
-1. Open the following link https://script.google.com/d/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
+1. Open the following link https://script.google.com/d/1OtZoo6tIv0powmxjPyBGwPR2uSLIo8IS4cp_U3jehNLeVtosisfS3FvZ/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
 
 2. Change the name of the new Apps Script Project by clicking on the `Copy of Template Project - University - Peer Evaluation Automation` name
 
@@ -218,5 +218,6 @@ Execute on the Apps Script Project the method `testWebApp`.
 ### Development Roadmap
 
 - [x] Sending automatic email to the student with the link to the spreadsheet after its creation or t to recover access - v1.0.1
+- [x] Remove student id from the project to only use email and name - v1.0.2
 - [ ] Formatting the `ADJUSTED_GRADES` sheet instead of plain text
 - [ ] Semantic releases

@@ -47,11 +47,11 @@ const getStudentsSubmittedAndDataByGroups = (
 };
 
 const getDataSanitinisedAndDataByStudentReviewed = (dataByGroups) => {
-  const dataSanitised = {};
+  const dataSanitized = {};
   const dataByStudentReviewed = {};
 
   Object.keys(dataByGroups).map((key) => {
-    dataSanitised[key] = [];
+    dataSanitized[key] = [];
     dataByGroups[key].map((dataByGroup, index) => {
       dataByStudentReviewed[index] =
         typeof dataByStudentReviewed[index] === "object"
@@ -59,11 +59,11 @@ const getDataSanitinisedAndDataByStudentReviewed = (dataByGroups) => {
           : [];
 
       dataByStudentReviewed[index].push(dataByGroup[dataByGroup.length - 1]);
-      dataSanitised[key].push(dataByGroup[dataByGroup.length - 1]);
+      dataSanitized[key].push(dataByGroup[dataByGroup.length - 1]);
     });
   });
 
-  return { dataSanitised, dataByStudentReviewed };
+  return { dataSanitized, dataByStudentReviewed };
 };
 
 const getAvgByStudentIndividually = (dataByStudentReviewed) => {
@@ -157,7 +157,7 @@ const getAdjustedMarkByGroupData = (
   );
 
   const {
-    dataSanitised,
+    dataSanitized,
     dataByStudentReviewed,
   } = getDataSanitinisedAndDataByStudentReviewed(dataByGroups);
 
@@ -207,7 +207,7 @@ const getAdjustedMarkByGroupData = (
   );
 
   return {
-    dataSanitised,
+    dataSanitized,
     avgByStudentIndividually,
     totalGroupPeerAvgByStudents,
     studentsByGroup,
@@ -226,7 +226,7 @@ const getAdjustedMarkViewByGroup = (
   groupProjectMark
 ) => {
   const {
-    dataSanitised,
+    dataSanitized,
     avgByStudentIndividually,
     totalGroupPeerAvgByStudents,
     studentsByGroup,
@@ -256,10 +256,10 @@ const getAdjustedMarkViewByGroup = (
 
   dataAdjustedMarkView.push(["Student Names", ...studentsByGroup]);
 
-  Object.keys(dataSanitised).map((studentId) => {
+  Object.keys(dataSanitized).map((studentId) => {
     dataAdjustedMarkView.push([
       studentsById[studentId],
-      ...dataSanitised[studentId],
+      ...dataSanitized[studentId],
     ]);
   });
 

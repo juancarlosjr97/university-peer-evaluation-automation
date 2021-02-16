@@ -18,7 +18,7 @@
         background: linear-gradient(#141e30, #243b55);
       }
 
-      input[type="number"] {
+      input[type="text"] {
         width: 100%;
         padding: 12px 20px;
         margin: 8px 0;
@@ -119,26 +119,28 @@
 
   <script>
     const onStudentIdInput = () => {
-      let studentId = Number(document.getElementById("studentId").value);
-      document.getElementById("continueButton").disabled = studentId
+      let studentEmail = document.getElementById("studentEmail").value;
+      document.getElementById("continueButton").disabled = studentEmail
         ? false
         : true;
     };
 
     const onPeerEvaluationModuleClick = () => {
-      let studentId = Number(document.getElementById("studentId").value);
+      let studentEmail = document.getElementById("studentEmail").value;
 
       changeButtonLoadingStatus("block", "none");
 
       google.script.run
         .withSuccessHandler(successRequestingStudentSheet)
         .withFailureHandler(errorCreatingStudentSheet)
-        .createStudentSheetByStudentId(studentId);
+        .createStudentSheetByStudentEmail(studentEmail);
     };
 
     const errorCreatingStudentSheet = (error) => {
       changeButtonLoadingStatus("none", "block");
-      alert("Error creating your peer evaluation sheet. Contact your lecturer.");
+      alert(
+        "Error creating your peer evaluation sheet. Contact your lecturer."
+      );
     };
 
     const successRequestingStudentSheet = () => {
@@ -163,11 +165,11 @@
           <?= MODULE_NAME ?>
         </h2>
         <div class="container">
-          <label for="sId"><b>Student ID</b></label>
+          <label for="sId"><b>Student Email</b></label>
           <input
-            id="studentId"
-            type="number"
-            placeholder="Enter your Student ID"
+            id="studentEmail"
+            type="text"
+            placeholder="Enter your Student Email"
             name="sId"
             required
             oninput="onStudentIdInput()"
