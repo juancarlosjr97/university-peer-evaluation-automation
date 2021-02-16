@@ -215,11 +215,13 @@ const getAllPeerEvaluationData = () => {
       .setValues(allDataSheets);
 
     sendEmail(
+      EMAIL_NOTIFICATIONS,
       `Module ${MODULE_NAME} Peer Evaluation completed`,
       `The module ${MODULE_NAME} has collected all data from the peer evaluation.`
     );
   } else {
     sendEmail(
+      EMAIL_NOTIFICATIONS,
       `Module ${MODULE_NAME} Peer Evaluation completed - Empty evaluations`,
       `The module ${MODULE_NAME} has not data to collect for the peer evaluation of the module.`
     );
