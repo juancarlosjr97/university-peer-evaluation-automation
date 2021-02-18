@@ -71,7 +71,7 @@ We need to have access to a Google account with Google Drive enabled
 
 ### Part 3. Apps Script Project Setup
 
-1. Open the following link https://script.google.com/d/1OtZoo6tIv0powmxjPyBGwPR2uSLIo8IS4cp_U3jehNLeVtosisfS3FvZ/edit?usp=sharing and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
+1. Open the following link https://script.google.com/home/projects/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
 
 2. Change the name of the new Apps Script Project by clicking on the `Copy of Template Project - University - Peer Evaluation Automation` name
 
