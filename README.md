@@ -1,4 +1,4 @@
-# University Peer Evaluation Automation v1.1.0
+# University Peer Evaluation Automation
 
 [![GitHub license](https://img.shields.io/github/license/juancarlosjr97/university-peer-evaluation-automation)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/blob/main/LICENSE)
 [![publish](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml/badge.svg)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml)
@@ -240,3 +240,9 @@ Execute on the Apps Script Project the method `testWebApp`.
 - [ ] Formatting the `ADJUSTED_GRADES` sheet instead of plain text
 - [ ] Semantic releases
 - [ ] Find email alternative
+- [x] Fix student with the same name v1.0.4
+- [ ] Fixing spreadsheets duplicate if a student has already created one
+
+### Performance
+
+- 240 spreadsheet with 6 student per group = 3 - 5 minutes

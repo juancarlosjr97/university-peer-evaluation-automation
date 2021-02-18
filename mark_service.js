@@ -12,7 +12,7 @@ const getStudentsByGroup = (dataStudents, groupName) => {
   const studentsByGroup = new Set();
   for (x = 1; x < dataStudents.length; x++) {
     if (dataStudents[x][2] === groupName) {
-      studentsByGroup.add(dataStudents[x][0]);
+      studentsByGroup.add(`${dataStudents[x][0]} - ${dataStudents[x][1]}`);
     }
   }
   return studentsByGroup;
@@ -126,6 +126,10 @@ const getAdjustedMark = (
       gradeAdjusted = 0;
     } else if (gradeAdjusted > 100) {
       gradeAdjusted = 100;
+    }
+
+    if (typeof gradeAdjusted === "string") {
+      gradeAdjusted = Number(gradeAdjusted);
     }
 
     adjustedMarkPeerStudent.push(gradeAdjusted.toFixed(2));
@@ -254,7 +258,7 @@ const getAdjustedMarkViewByGroup = (
   dataAdjustedMarkView.push(["Sum of Group Average", sumGroupAvg]);
   dataAdjustedMarkView.push(["Total Submissions", totalStudentSubmissions]);
 
-  dataAdjustedMarkView.push(["Student Names", ...studentsByGroup]);
+  dataAdjustedMarkView.push(["Student Emails", ...studentsByGroup]);
 
   Object.keys(dataSanitized).map((studentId) => {
     dataAdjustedMarkView.push([
