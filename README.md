@@ -1,4 +1,8 @@
-# University Peer Evaluation Automation v1.0.2
+# University Peer Evaluation Automation v1.1.0
+
+[![GitHub license](https://img.shields.io/github/license/juancarlosjr97/university-peer-evaluation-automation)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/blob/main/LICENSE)
+[![publish](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml/badge.svg)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/juancarlosjr97/university-peer-evaluation-automation/main)
 
 This repository contains the code of the University Peer Evaluation Automation that runs on Apps Script using `V8` Runtime.
 
@@ -10,7 +14,21 @@ The data is collected automatically using a datetime trigger, and the emails con
 
 The data collected is saved on spreadsheets created using the web app by the student, and those spreadsheet are saved automatically on a Google Drive folder.
 
-If a student has already created a spreadsheet for peer-evaluation, it cannot access the spreadsheet. It will have to request the spreadsheet URL to the project owner.
+If a student has already created a spreadsheet for peer-evaluation, only has to request the peer evaluation form again and an email will be sent to the email account.
+
+## Using old versions
+
+### Check your version
+
+In order to check your version, visit the `version.gs` on your app script project.
+
+If you version is the same as the current version specified on the top of the documentation, you can continue reading. Otherwise, click on `tags` to see the previous versions
+
+<p>&nbsp;</p>
+
+> _If you cannot find a `version.gs` it means you are using a version older than 1.1.0 and you can use the tag 1.0.1 as reference for your project._
+
+<p>&nbsp;</p>
 
 ## Setup
 
