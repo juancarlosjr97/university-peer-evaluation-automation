@@ -1,5 +1,5 @@
 const TEST_DATA = {
-  STUDENT_ID: "TEST",
+  STUDENT_EMAIL: "TEST",
   STUDENTS_BY_GROUP_NAME: [
     ["Student - Test 1"],
     ["Student - Test 2"],
@@ -8,7 +8,7 @@ const TEST_DATA = {
 };
 
 const testWebApp = () => {
-  let testSheetUrl = createStudentSheetByStudentId(TEST_DATA.STUDENT_ID);
+  let testSheetUrl = createStudentSheetByStudentEmail(TEST_DATA.STUDENT_EMAIL);
   let testSheetId = SpreadsheetApp.openByUrl(testSheetUrl).getId();
   removeParentFolderDrive(testSheetId);
   removeFileById(testSheetId);

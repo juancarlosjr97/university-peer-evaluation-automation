@@ -1,5 +1,5 @@
 const MASTER_SPREADSHEET_URL =
-  "https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit#gid=0";
+  "https://docs.google.com/spreadsheets/d/1kq3DTeuo7oBURsDEE0pgs1CIsYshnYvj9xCji1dlkFM/edit#gid=0";
 const COLLECT_DATA_TRIGGER_DATE = {
   DAY: "09",
   MONTH: "01",

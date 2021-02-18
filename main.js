@@ -10,12 +10,12 @@ const removeFileById = (fileId) => {
   DriveApp.getFileById(fileId).setTrashed(true);
 };
 
-const createStudentSheetByStudentId = (studentId) => {
-  let studentsData = getStudentsNameByGroup(studentId);
+const createStudentSheetByStudentEmail = (studentEmail) => {
+  let studentsData = getStudentsNameByGroup(studentEmail);
 
-  if (!studentsData.sheetExist) {
+  if (!studentsData.sheetExist || studentEmail == TEST_DATA.STUDENT_EMAIL) {
     let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
-    let newStudentSheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
+    let newStudentSheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentEmail}`;
     let newStudentSheet = sheet.copy(`${newStudentSheetName} - Temp`);
 
     removeUnwantedWorksheet(newStudentSheet);
@@ -24,7 +24,7 @@ const createStudentSheetByStudentId = (studentId) => {
       newStudentSheetName
     );
 
-    if (studentId === TEST_DATA.STUDENT_ID) {
+    if (studentEmail === TEST_DATA.STUDENT_EMAIL) {
       setStudentsNameByGroup(newStudentSheet, TEST_DATA.STUDENTS_BY_GROUP_NAME);
     } else {
       setStudentsNameByGroup(
@@ -46,29 +46,33 @@ const createStudentSheetByStudentId = (studentId) => {
     file.moveTo(folderId);
     setFileSharingToPublic(file);
 
-    let newSpreadsheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentId}`;
+    let newSpreadsheetName = `${WORKSHEET_NAME_TEMPLATE} - ${studentEmail}`;
 
     renameSheet(
       newStudentSheet,
       MASTER_FORM_WORKSHEET_NAME,
       newSpreadsheetName
     );
-    writeOnCellStudentId(newStudentSheet, newSpreadsheetName, studentId);
+
+    writeOnCellStudentEmail(newStudentSheet, newSpreadsheetName, studentEmail);
+
     writeOnCellGroupName(
       newStudentSheet,
       newSpreadsheetName,
       studentsData.studentGroup
     );
+
     writeOnCellStudentName(
       newStudentSheet,
       newSpreadsheetName,
       studentsData.studentName
     );
+
     writeOnCellTodayDate(newStudentSheet, newSpreadsheetName);
 
     let newStudentSheetUrl = newStudentSheet.getUrl();
 
-    if (studentId !== TEST_DATA.STUDENT_ID) {
+    if (studentEmail !== TEST_DATA.STUDENT_EMAIL) {
       saveStudentSheetOnCentralData(
         studentsData.studentRow,
         newStudentSheetUrl
@@ -78,17 +82,23 @@ const createStudentSheetByStudentId = (studentId) => {
     studentsData.studentSheet = newStudentSheetUrl;
   }
 
-  sendEmailHtml(
-    studentsData.studentEmail,
-    `Peer evaluation - ${MODULE_NAME}`,
-    `Hi ${studentsData.studentName},
+  if (studentEmail !== TEST_DATA.STUDENT_EMAIL) {
+    sendEmailHtml(
+      studentsData.studentEmail,
+      `Peer evaluation - ${MODULE_NAME}`,
+      `Hi ${studentsData.studentName},
 
 Your peer evaluation sheet is: ${studentsData.studentSheet}
 
 Thanks,
 
 Module ${MODULE_NAME} Automation.`
-  );
+    );
+  }
+
+  if (studentEmail === TEST_DATA.STUDENT_EMAIL) {
+    return studentsData.studentSheet;
+  }
 
   return null;
 };
@@ -101,7 +111,7 @@ const saveStudentSheetOnCentralData = (studentRow, newStudentSheetUrl) => {
   let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL).getSheetByName(
     MASTER_WORKSHEET_DATA
   );
-  sheet.getRange(`E${studentRow + 1}`).setValue(newStudentSheetUrl);
+  sheet.getRange(`D${studentRow + 1}`).setValue(newStudentSheetUrl);
 };
 
 const setStudentsNameByGroup = (sheet, allStudentsNameByGroup) => {
@@ -116,7 +126,7 @@ const setStudentsNameByGroup = (sheet, allStudentsNameByGroup) => {
   sheet.deleteRows(lastRowWithData + 1, totalRows - lastRowWithData);
 };
 
-const getStudentsNameByGroup = (studentId) => {
+const getStudentsNameByGroup = (studentEmail) => {
   let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
   let data = sheet
     .getSheetByName(MASTER_WORKSHEET_DATA)
@@ -125,17 +135,15 @@ const getStudentsNameByGroup = (studentId) => {
 
   let studentGroup = null;
   let studentName = null;
-  let studentEmail = null;
   let studentRow = null;
   let studentSheet = null;
-  let sheetExist = null;
+  let sheetExist = false;
 
   for (x = 1; x < data.length; x++) {
-    if (Number(data[x][1]) === Number(studentId)) {
+    if (data[x][1].trim() === studentEmail.trim()) {
       studentName = data[x][0];
       studentGroup = data[x][2];
-      studentEmail = data[x][3];
-      studentSheet = data[x][4];
+      studentSheet = data[x][3];
       studentRow = x;
       break;
     }
@@ -154,7 +162,6 @@ const getStudentsNameByGroup = (studentId) => {
   }
 
   return {
-    studentId,
     studentName,
     studentEmail,
     studentRow,
@@ -199,8 +206,8 @@ const getAllPeerEvaluationData = () => {
 
   sheetIds.map((sheetId) => {
     let sheetData = SpreadsheetApp.openById(sheetId).getDataRange().getValues();
-    let sheetDataSantinised = getSheetDataSanitised(sheetData);
-    allDataSheets.push(...sheetDataSantinised);
+    let sheetDataSanitized = getSheetDataSanitized(sheetData);
+    allDataSheets.push(...sheetDataSanitized);
   });
 
   let importDataSheet = SpreadsheetApp.openByUrl(
@@ -238,16 +245,16 @@ const sendEmailHtml = (to, subject, htmlBody) => {
   MailApp.sendEmail(to, subject, htmlBody);
 };
 
-const getSheetDataSanitised = (sheetData) => {
+const getSheetDataSanitized = (sheetData) => {
   let date = sheetData[0][1];
-  let studentId = sheetData[1][1];
+  let studentEmail = sheetData[1][1];
   let groupName = sheetData[3][1];
 
   let dataReview = [];
 
   for (x = FIRST_ROW_STUDENT_DATA - 1; x < sheetData.length; x++) {
     if (sheetData[x][0].length) {
-      let row = [date, studentId, groupName, ...sheetData[x]];
+      let row = [date, studentEmail, groupName, ...sheetData[x]];
       dataReview.push(row);
     }
   }
@@ -265,9 +272,13 @@ const writeOnCellTodayDate = (spreadsheet, spreadsheetName) => {
   sheet.getRange("B1").setValue(getTodayDate());
 };
 
-const writeOnCellStudentId = (spreadsheet, spreadsheetName, studentId) => {
+const writeOnCellStudentEmail = (
+  spreadsheet,
+  spreadsheetName,
+  studentEmail
+) => {
   let sheet = spreadsheet.getSheetByName(spreadsheetName);
-  sheet.getRange("B2").setValue(studentId);
+  sheet.getRange("B2").setValue(studentEmail);
 };
 
 const writeOnCellStudentName = (spreadsheet, spreadsheetName, studentName) => {
