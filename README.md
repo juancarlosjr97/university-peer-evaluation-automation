@@ -239,3 +239,4 @@ Execute on the Apps Script Project the method `testWebApp`.
 - [x] Remove student id from the project to only use email and name - v1.0.2
 - [ ] Formatting the `ADJUSTED_GRADES` sheet instead of plain text
 - [ ] Semantic releases
+- [ ] Find email alternative
