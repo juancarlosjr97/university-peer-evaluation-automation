@@ -55,7 +55,7 @@ We need to have access to a Google account with Google Drive enabled
 
 ### Part 2. Project Spreadsheet Setup
 
-1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1kq3DTeuo7oBURsDEE0pgs1CIsYshnYvj9xCji1dlkFM/edit?usp=sharing. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
+1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit#gid=770336731. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
 
 2. Update the sheet `DATA` with the correct data of the students, name, email and the student group
 
