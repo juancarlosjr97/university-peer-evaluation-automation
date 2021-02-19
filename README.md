@@ -3,8 +3,13 @@
 [![GitHub license](https://img.shields.io/github/license/juancarlosjr97/university-peer-evaluation-automation)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/blob/main/LICENSE)
 [![publish](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml/badge.svg)](https://github.com/juancarlosjr97/university-peer-evaluation-automation/actions/workflows/publish.yml)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/juancarlosjr97/university-peer-evaluation-automation/main)
+https://img.shields.io/github/issues/juancarlosjr97/university-peer-evaluation-automation
 
 This repository contains the code of the University Peer Evaluation Automation that runs on Apps Script using `V8` Runtime.
+
+## Issues Open
+
+See the list of current issues open to make sure to understand the system limitations
 
 ## How does it work?
 
