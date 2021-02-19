@@ -126,7 +126,9 @@
     };
 
     const onPeerEvaluationModuleClick = () => {
-      let studentEmail = document.getElementById("studentEmail").value;
+      let studentEmail = document
+        .getElementById("studentEmail")
+        .value.toLowerCase();
 
       changeButtonLoadingStatus("block", "none");
 
