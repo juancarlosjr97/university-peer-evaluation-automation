@@ -145,9 +145,14 @@
       );
     };
 
-    const successRequestingStudentSheet = () => {
+    const successRequestingStudentSheet = (sheetUrl) => {
       changeButtonLoadingStatus("none", "block");
       document.getElementById("peerEvaluation").style.display = "block";
+
+      document.getElementById("peerEvaluationUrl").href = sheetUrl;
+      document
+        .getElementById("peerEvaluationUrl")
+        .setAttribute("href", sheetUrl);
     };
 
     const changeButtonLoadingStatus = (
@@ -198,7 +203,10 @@
         <div class="url-container" style="background-color: #f1f1f1">
           <div id="peerEvaluation" style="display: none">
             <h2 id="peerEvaluationUrlHeader">
-              Your peer evaluation sheet has been sent to your student email.
+              Click on this URL to open the:
+              <a target="_blank" href="" id="peerEvaluationUrl"
+                >Peer Evaluation Form.</a
+              >
             </h2>
           </div>
         </div>

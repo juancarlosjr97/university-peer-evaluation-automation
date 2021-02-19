@@ -100,7 +100,7 @@ Module ${MODULE_NAME} Automation.`
     return studentsData.studentSheet;
   }
 
-  return null;
+  return studentsData.studentSheet;
 };
 
 const setFileSharingToPublic = (file) => {
@@ -238,11 +238,11 @@ const getAllPeerEvaluationData = () => {
 };
 
 const sendEmail = (to, subject, message) => {
-  MailApp.sendEmail(to, subject, message);
+  // MailApp.sendEmail(to, subject, message);
 };
 
 const sendEmailHtml = (to, subject, htmlBody) => {
-  MailApp.sendEmail(to, subject, htmlBody);
+  // MailApp.sendEmail(to, subject, htmlBody);
 };
 
 const getSheetDataSanitized = (sheetData) => {
