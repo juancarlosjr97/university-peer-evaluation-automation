@@ -101,6 +101,18 @@ const getTotalGroupPeerAvgByStudents = (
   return totalGroupPeerAvgByStudents;
 };
 
+const getSettingsAdjustedMarkGrade = () => {
+  const data = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL)
+    .getSheetByName(MASTER_WORKSHEET_SETTINGS)
+    .getDataRange()
+    .getValues();
+
+  return {
+    maxGradeIncrease: data[1][1],
+    maxGradeDecrease: data[2][1],
+  };
+};
+
 const getAdjustedMark = (
   preAdjustedMarkPeerStudents,
   groupProjectMark,
@@ -108,8 +120,12 @@ const getAdjustedMark = (
 ) => {
   const adjustedMarkPeerStudent = [];
 
-  const gradeMin = groupProjectMark - 10;
-  const gradeMax = groupProjectMark + 10;
+  const settingsAdjustedMarkGrade = getSettingsAdjustedMarkGrade();
+
+  const gradeMax =
+    groupProjectMark + settingsAdjustedMarkGrade["maxGradeIncrease"];
+  const gradeMin =
+    groupProjectMark - settingsAdjustedMarkGrade["maxGradeDecrease"];
 
   preAdjustedMarkPeerStudents.map((preAdjustedMarkPeerStudent) => {
     let gradeAdjusted = null;

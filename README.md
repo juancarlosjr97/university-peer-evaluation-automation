@@ -9,7 +9,7 @@ This repository contains the code of the University Peer Evaluation Automation t
 
 ## Issues Open
 
-See the list of current issues open to make sure to understand the system limitations
+See the list of current issues open to make sure to understand the system limitations.
 
 ## How does it work?
 
@@ -27,7 +27,7 @@ If a student has already created a spreadsheet for peer-evaluation, only has to 
 
 In order to check your version, visit the `version.gs` on your app script project.
 
-If you version is the same as the current version specified on the top of the documentation, you can continue reading. Otherwise, click on `tags` to see the previous versions
+If you version is the same as the current version specified on the top of the documentation, you can continue reading. Otherwise, click on `tags` to see the previous versions and its instructions
 
 <p>&nbsp;</p>
 
@@ -58,11 +58,21 @@ We need to have access to a Google account with Google Drive enabled
 9. Click on `Publish app`, and then click on `Confirm`
 10. On the top right corner, the three vertical dots icon, click on `Project settings` and copy the `Project number` to use later
 
-### Part 2. Project Spreadsheet Setup
+### Part 2. Email setup with Google app passwords
 
-1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1ZLAeJ6h1pGAb1dwgBzpYfXKZTNM7dwVsA47zVMtIaEo/edit#gid=770336731. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
+The application uses google SMTP because allows to send up to 2000 emails per day. Follow these steps to setup an app password https://support.google.com/accounts/answer/185833?hl=en
 
-2. Update the sheet `DATA` with the correct data of the students, name, email and the student group
+<p>&nbsp;</p>
+> _It is recommended to create a Google account and do not use the personal as the credentials to be created allow to send emails using that account to whoever have access._
+<p>&nbsp;</p>
+
+Save the app password to be used in the next sections and in the future for multiple peer evaluation projects.
+
+### Part 3. Project Spreadsheet Setup
+
+1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1kacywpWhTB9Ns51YjUjOlSSZ_6Irtu0leeY5K9WI0YM. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
+
+2. Update the sheet `DATA` with the correct data of the students, name, email and the student group.
 
 3. Clear the data of the sheet `TEAM_GROUP_GRADES` from the second row.
 
@@ -74,9 +84,17 @@ We need to have access to a Google account with Google Drive enabled
 
 - After pulling data to the `IMPORTED_DATA` sheet, do not make any changes manually to that sheet as it could create issues creating the `ADJUSTED_GRADES`.
 
-### Part 3. Apps Script Project Setup
+### Part 4. Custom settings to the adjusted/final mark
 
-1. Open the following link https://script.google.com/home/projects/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee/edit and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
+1. Open the copy of the spreadsheet and go to the worksheet `SETTINGS`
+
+2. Adjust the `Max Grade Increase` and `Max Grade Decrease`
+
+Please read our [Custom settings](./SETTINGS.md) instructions to understand how the adjusted/final mark is calculated.
+
+### Part 5. Apps Script Project Setup
+
+1. Open the following link https://script.google.com/home/projects/1Ex0nSbU-tmLgjEXXmKoA4hizxAj3Siu1OHZvjYzDzFVmsoBT1rAXGMee and create a copy of the Apps Script project by clicking on the expandable navigation on the far left menu item named `Overview`, and then on the `Make a copy` icon
 
 2. Change the name of the new Apps Script Project by clicking on the `Copy of Template Project - University - Peer Evaluation Automation` name
 
@@ -90,31 +108,35 @@ We need to have access to a Google account with Google Drive enabled
 
 7. Replace the value of the constant `MASTER_SPREADSHEET_URL` to the spreadsheet URL created on the `Project Spreadsheet Setup` without deleting the double quotes
 
-8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE` to the date that you would like the system to automatically collect the data without deleting the double quotes
+8. Update the value of the constant `COLLECT_DATA_TRIGGER_DATE_TIME` to the date and time that you would like the system to automatically collect the data. The example shows that the data will be collected on March 10, 2021 at 14:00. The time is using 24-hour notation.
 
 9. Update the constant `MODULE_NAME` to your module name and the title of the Web App
 
-10. Update the constant `GDRIVE_FOLDER_NAME`. The value on the `GDRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project
+10. Update the constant `GOOGLE_DRIVE_FOLDER_NAME`. The value on the `GOOGLE_DRIVE_FOLDER_NAME` would be the name of the Google Drive folder for this project
 
 The constant `MODULE_NAME` will be used to identified the spreadsheets and the Google Drive folder.
 
 11. Update the constant `EMAIL_NOTIFICATIONS` using a comma separated emails following the example
 
-12. Click on `Run`
+12. Update the constant `SMTP_USERNAME` with the email of the Google account used on step 2
+
+13. Update the constant `SMTP_PASSWORD` with the app password of the Google account created on step 2
+
+14. Click on `Run`
 
 During the first execution, the system will ask for your permissions to execute code on your behalf, as sending emails, creating/deleting files/folders.
 
 For more information about what the system is requesting permissions, visit the following page: https://developers.google.com/apps-script/guides/services/authorization. Additionally, to understand the specifics permissions of this project, go to the `Overview` and see the permissions under `Project OAuth Scopes`
 
-13. Click on `Review permissions`
+15. Click on `Review permissions`
 
-14. Select the account added as a `Test user` during the `Google Cloud Platform` setup
+16. Select the account added as a `Test user` during the `Google Cloud Platform` setup
 
-15. If appears a page with a title `Google hasn't verified this app`, click on `Advance` and then on `Go to PROJECT_NAME (unsafe)`. For more information about the information about `Google hasn't verified this app` visit the following link: https://support.google.com/cloud/answer/7454865?hl=en
+17. If appears a page with a title `Google hasn't verified this app`, click on `Advance` and then on `Go to PROJECT_NAME (unsafe)`. For more information about the information about `Google hasn't verified this app` visit the following link: https://support.google.com/cloud/answer/7454865?hl=en
 
 The following page will show all the permissions that the system is requesting access to execute on your Apps Script project
 
-16. Click on `Allow`
+18. Click on `Allow`
 
 If everything was executed correctly, you should have received an email with the link to your Web App. Additionally, it should have created two triggers:
 
@@ -139,11 +161,19 @@ To check if everything was executed correctly, the `Execution log` will reflect 
 1. Share with your student the Web app
 2. Open your spreadsheet project, and the new menu has been created named `Manual triggers`
 
+- Create All Student Sheets and Send Email
+
+  - It will create and send a the peer evaluation sheet to all the students automatically without the student interaction with the system
+
 - Get All Peer-Evaluation Data
+
   - It will collect all the peer-evaluation created and will be added to the `IMPORTED_DATA`
+
 - Get Adjusted Marks
+
   - It will create the adjusted marks using the grades from the `TEAM_GROUP_GRADES` and the data from `IMPORTED_DATA`
   - By clicking on `Get Adjusted Marks` it will execute the `Get All Peer-Evaluation Data` automatically to avoid using incomplete data
+
 - Delete Peer-Evaluation files
   - It will delete the not longer needed peer-evaluation files created by the students automatically
 
@@ -154,7 +184,7 @@ To check if everything was executed correctly, the `Execution log` will reflect 
 - Sum of Group Average = Sum of all scores averages give to a student
 - Student mark/total team = Avg score by student / Sum of all scores averages give to a student
 - Preadjusted project mark = Student mark/total team *Total Submissions *Group Project Mark
-- Adjusted/Final mark = Preadjusted project mark +/- 10 group mark. Not lower than 0 or higher than 100
+- Adjusted/Final mark = Preadjusted project mark +/- the value selected from the settings. By default, the grade is not lower than 0 or higher than 100, and the max grade increase or decrease is 10.
 
 ## Sharing Access
 
@@ -168,13 +198,13 @@ Go to the project spreadsheet, click on `Share`, enter the email of the person t
 
 ###### Google Drive
 
-1. Go to `https://drive.google.com/drive/my-drive` and open the folder created for the project. The folder should have the same name as the constant `GDRIVE_FOLDER_NAME` created during `Apps Script Project Setup` step `10`.
+1. Go to `https://drive.google.com/drive/my-drive` and open the folder created for the project. The folder should have the same name as the constant `GOOGLE_DRIVE_FOLDER_NAME` created during `Apps Script Project Setup` step `10`.
 
 2. Right click on the folder, and click on `Share` and enter the email of the person to share. Select either `Editor` or `Viewer` depending on the access require to the project Google Drive folder.
 
 ### Manual Triggers
 
-By sharing access will allow to those invited to execute the `Manual triggers` on the project spreadsheet.
+By sharing access will allow to those invited to the App Script project to execute the `Manual triggers` from the project spreadsheet.
 
 #### Apps Script Project
 
@@ -190,64 +220,22 @@ Go to `https://script.google.com/`, right click on the project and click on `Sha
 
 ## Multiple project setup
 
-In order to setup multiple project, repeat the Part 2 and 3 of the setup using the `Project number` of the `GCP` project created the first time.
+In order to setup multiple project, repeat the Part 3 and 4 of the setup using the `Project number` of the `GCP` project created the first time, with the same one-time-password to send emails.
 
 The `Google Cloud Platform` project created the first time during the setup Part 1, can be used for multiple projects, in other words, you only need to create a `GCP` project once.
 
 ## Update to latest version
 
-Regardless of the update, a GCP project does not have to be recreated, it can be reused.
-
-Due to limitations of Google App Scripts, to update the system follow the [second](#part-2-project-spreadsheet-setup) and the [third](#part-3-apps-script-project-setup) step to update the spreadsheet.
+Due to limitations of Google App Scripts, to update the system follow the [third](#part-3-project-spreadsheet-setup), [fourth](#part-4-custom-settings-to-the-adjusted/final-mark) and [fifth](#part-5-apps-script-project-setup) steps to update the app to the latest version.
 
 ## Development
 
-Follow this section if you would like to contribute to this project by editing the code.
+To support our development team, please read our [development](./DEVELOPMENT.md) instructions.
 
-### Prerequisites
+### Roadmap
 
-We need to have installed the following services:
+To read about the development and roadmap visit our [projects](https://github.com/juancarlosjr97/university-peer-evaluation-automation/projects)
 
-- [GIT](https://git-scm.com/)
-- [NodeJS v12](https://nodejs.org/en/) - Recommend to use [nvm](https://github.com/nvm-sh/nvm)
-- [clasp](https://developers.google.com/apps-script/guides/clasp)
-- Google account with Google Drive enabled
+## Contributing
 
-and a Unix based computer, such Mac or Ubuntu.
-
-### Installation Local Development
-
-#### Source Code
-
-We need to clone the repositories in our local environment:
-
-```bash
-git clone git@github.com:juancarlosjr97/university-peer-evaluation-automation.git
-```
-
-#### Apps Script project setup
-
-Create an empty Apps Script project or copy the ScripsId to add it using the setup script.
-
-```
-cd path/to/project
-bash setup.sh $SCRIPT_ID
-```
-
-### Automated Testing
-
-Execute on the Apps Script Project the method `testWebApp`.
-
-### Development Roadmap
-
-- [x] Sending automatic email to the student with the link to the spreadsheet after its creation or t to recover access - v1.0.1
-- [x] Remove student id from the project to only use email and name - v1.0.2
-- [ ] Formatting the `ADJUSTED_GRADES` sheet instead of plain text
-- [ ] Semantic releases
-- [ ] Find email alternative
-- [x] Fix student with the same name v1.0.4
-- [ ] Fixing spreadsheets duplicate if a student has already created one
-
-### Performance
-
-- 240 spreadsheet with 6 student per group = 3 - 5 minutes
+Please read our [Contributing Guide](./CONTRIBUTING.md) before submitting Pull Requests.

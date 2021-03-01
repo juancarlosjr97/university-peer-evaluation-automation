@@ -1,7 +1,7 @@
 const removeParentFolderDrive = (fileId) => {
   let folder = DriveApp.getFileById(fileId).getParents().next();
 
-  if (folder.getName() === GDRIVE_FOLDER_NAME) {
+  if (folder.getName() === GOOGLE_DRIVE_FOLDER_NAME) {
     folder.setTrashed(true);
   }
 };
@@ -10,8 +10,25 @@ const removeFileById = (fileId) => {
   DriveApp.getFileById(fileId).setTrashed(true);
 };
 
+const createAllStudentSheets = () => {
+  const dataStudents = getStudentsData();
+  const dataStudentsSanitised = dataStudents.slice(1);
+
+  dataStudentsSanitised.forEach((datStudent) => {
+    try {
+      createStudentSheetByStudentEmail(datStudent[1]);
+    } catch (e) {
+      console.log(`Error: ${e} for ${datStudent[1]}`);
+    }
+  });
+};
+
 const createStudentSheetByStudentEmail = (studentEmail) => {
   let studentsData = getStudentsNameByGroup(studentEmail);
+
+  if (!studentsData.studentName) {
+    return "Your email cannot be found on the system. Contact your lecturer";
+  }
 
   if (!studentsData.sheetExist || studentEmail == TEST_DATA.STUDENT_EMAIL) {
     let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
@@ -19,6 +36,7 @@ const createStudentSheetByStudentEmail = (studentEmail) => {
     let newStudentSheet = sheet.copy(`${newStudentSheetName} - Temp`);
 
     removeUnwantedWorksheet(newStudentSheet);
+
     newStudentSheet = getStudentSheetWithCleanHistory(
       newStudentSheet,
       newStudentSheetName
@@ -37,10 +55,10 @@ const createStudentSheetByStudentEmail = (studentEmail) => {
     let folderId = null;
 
     try {
-      let folders = DriveApp.getFoldersByName(GDRIVE_FOLDER_NAME);
+      let folders = DriveApp.getFoldersByName(GOOGLE_DRIVE_FOLDER_NAME);
       folderId = folders.next();
     } catch (err) {
-      folderId = DriveApp.createFolder(GDRIVE_FOLDER_NAME);
+      folderId = DriveApp.createFolder(GOOGLE_DRIVE_FOLDER_NAME);
     }
 
     file.moveTo(folderId);
@@ -83,7 +101,7 @@ const createStudentSheetByStudentEmail = (studentEmail) => {
   }
 
   if (studentEmail !== TEST_DATA.STUDENT_EMAIL) {
-    sendEmailHtml(
+    sendEmail(
       studentsData.studentEmail,
       `Peer evaluation - ${MODULE_NAME}`,
       `Hi ${studentsData.studentName},
@@ -179,7 +197,7 @@ const getStudentSheetWithCleanHistory = (tempSheet, newStudentSheetName) => {
 };
 
 const getAllSpreadsheetIdsOnProject = () => {
-  let folders = DriveApp.getFoldersByName(GDRIVE_FOLDER_NAME);
+  let folders = DriveApp.getFoldersByName(GOOGLE_DRIVE_FOLDER_NAME);
 
   let folder = folders.hasNext() ? folders.next() : null;
 
@@ -237,12 +255,25 @@ const getAllPeerEvaluationData = () => {
   return allDataSheets;
 };
 
-const sendEmail = (to, subject, message) => {
-  MailApp.sendEmail(to, subject, message);
-};
+const sendEmail = (to, subject, body) => {
+  const payload = {
+    Host: "smtp.gmail.com",
+    Username: SMTP_USERNAME,
+    Password: SMTP_PASSWORD,
+    To: to,
+    From: SMTP_USERNAME,
+    Subject: subject,
+    Body: body,
+    Action: "Send",
+  };
 
-const sendEmailHtml = (to, subject, htmlBody) => {
-  MailApp.sendEmail(to, subject, htmlBody);
+  const options = {
+    method: "post",
+    contentType: "application/x-www-form-urlencoded",
+    payload: JSON.stringify(payload),
+  };
+
+  UrlFetchApp.fetch("https://smtpjs.com/v3/smtpjs.aspx?", options);
 };
 
 const getSheetDataSanitized = (sheetData) => {

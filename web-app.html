@@ -140,13 +140,20 @@
 
     const errorCreatingStudentSheet = (error) => {
       changeButtonLoadingStatus("none", "block");
+
       alert(
         "Error creating your peer evaluation sheet. Contact your lecturer."
       );
     };
 
-    const successRequestingStudentSheet = () => {
+    const successRequestingStudentSheet = (message) => {
       changeButtonLoadingStatus("none", "block");
+
+      if (typeof message === "string") {
+        alert(message);
+        return null;
+      }
+
       document.getElementById("peerEvaluation").style.display = "block";
     };
 
