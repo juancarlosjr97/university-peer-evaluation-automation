@@ -63,7 +63,9 @@ We need to have access to a Google account with Google Drive enabled
 The application uses google SMTP because allows to send up to 2000 emails per day. Follow these steps to setup an app password https://support.google.com/accounts/answer/185833?hl=en
 
 <p>&nbsp;</p>
-> _It is recommended to create a Google account and do not use the personal as the credentials to be created allow to send emails using that account to whoever have access._
+
+>_It is recommended to create a Google account and do not use the personal as the credentials to be created allow to send emails using that account to whoever have access._
+
 <p>&nbsp;</p>
 
 Save the app password to be used in the next sections and in the future for multiple peer evaluation projects.
