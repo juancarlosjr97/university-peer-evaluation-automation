@@ -31,7 +31,7 @@ If you version is the same as the current version specified on the top of the do
 
 <p>&nbsp;</p>
 
-> _If you cannot find a `version.gs` it means you are using a version older than 1.1.0 and you can use the tag 1.0.1 as reference for your project._
+>_If you cannot find a `version.gs` it means you are using a version older than 1.1.0 and you can use the tag 1.0.1 as reference for your project._
 
 <p>&nbsp;</p>
 
