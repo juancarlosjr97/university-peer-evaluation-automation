@@ -1,3 +1,7 @@
+const filterOnlyNumber = (arrayMix) => {
+  return arrayMix.filter((x) => typeof x === "number");
+};
+
 const getStudentsId = (dataStudents) => {
   const studentsById = {};
 
@@ -63,24 +67,103 @@ const getDataSanitinisedAndDataByStudentReviewed = (dataByGroups) => {
     });
   });
 
-  return { dataSanitized, dataByStudentReviewed };
+  let totalContributions = Object.keys(dataByStudentReviewed).length;
+  let totalSubmission = totalContributions;
+
+  const allEqual = (arr) => arr.every((val) => val === arr[0]);
+
+  Object.keys(dataSanitized).forEach((key) => {
+    const areAllValuesEqual = allEqual(dataSanitized[key]);
+
+    if (areAllValuesEqual && dataSanitized[key][0] === 0) {
+      dataSanitized[key] = Array(dataSanitized[key].length)
+        .fill()
+        .map((_, i) => "-");
+      totalSubmission = totalSubmission - 1;
+    }
+
+    dataSanitized[key] = dataSanitized[key].map((item) => {
+      if (item === 0) {
+        return "-";
+      }
+      return item;
+    });
+  });
+
+  Object.keys(dataByStudentReviewed).forEach((key) => {
+    const areAllValuesEqual = allEqual(dataByStudentReviewed[key]);
+
+    if (areAllValuesEqual && dataByStudentReviewed[key][0] === 0) {
+      dataByStudentReviewed[key] = Array(dataByStudentReviewed[key].length)
+        .fill()
+        .map((_, i) => "-");
+      totalContributions = totalContributions - 1;
+    }
+
+    dataByStudentReviewed[key] = dataByStudentReviewed[key].map((item) => {
+      if (item === 0) {
+        return "-";
+      }
+      return item;
+    });
+  });
+
+  const totalDivisionStudent = Math.max(totalSubmission, totalContributions);
+
+  return {
+    dataSanitized,
+    dataByStudentReviewed,
+    totalSubmission,
+    totalContributions,
+    totalDivisionStudent,
+  };
 };
 
-const getAvgByStudentIndividually = (dataByStudentReviewed) => {
+const getRoundedNumber = ({ value }) => {
+  const valueNumber = typeof value === "string" ? value.toString() : value;
+
+  return Math.round(valueNumber);
+};
+
+const getAvgByStudentIndividually = ({
+  dataByStudentReviewed,
+  totalDivisionStudent,
+}) => {
   const avgByStudentIndividually = [];
 
   Object.keys(dataByStudentReviewed).map((key) => {
-    const sum = dataByStudentReviewed[key].reduce((x, y) => x + y, 0);
-    const avg = sum / dataByStudentReviewed[key].length || 0;
-    avgByStudentIndividually.push(avg);
+    const dataByStudentReviewedSanitised = filterOnlyNumber(
+      dataByStudentReviewed[key]
+    );
+
+    const sum = dataByStudentReviewedSanitised.reduce((x, y) => x + y, 0);
+
+    if (sum === 0) {
+      avgByStudentIndividually.push("-");
+      return null;
+    }
+
+    const avg = sum / totalDivisionStudent || 0;
+    const avgSanitised = getRoundedNumber({ value: avg });
+
+    avgByStudentIndividually.push(avgSanitised);
   });
 
   return avgByStudentIndividually;
 };
 
 const getSumAndAvgGroup = (avgByStudentIndividually) => {
-  const sumGroupAvg = avgByStudentIndividually.reduce((x, y) => x + y, 0);
-  const avgByGroup = sumGroupAvg / avgByStudentIndividually.length || 0;
+  const avgByStudentIndividuallySanitised = filterOnlyNumber(
+    avgByStudentIndividually
+  );
+
+  const sumGroupAvg = avgByStudentIndividuallySanitised.reduce(
+    (x, y) => x + y,
+    0
+  );
+
+  const avgByGroup =
+    sumGroupAvg / avgByStudentIndividuallySanitised.length || 0;
 
   return {
     sumGroupAvg,
@@ -92,11 +175,18 @@ const getTotalGroupPeerAvgByStudents = (
   avgByStudentIndividually,
   sumGroupAvg
 ) => {
-  const totalGroupPeerAvgByStudents = [];
+  const totalGroupPeerAvgByStudents = avgByStudentIndividually.map(
+    (avgByStudent) => {
+      if (avgByStudent === "-") {
+        return "-";
+      }
+      const totalGroupPeerAvgByStudent = (avgByStudent / sumGroupAvg).toFixed(
+        2
+      );
 
-  avgByStudentIndividually.map((avgByStudent) => {
-    totalGroupPeerAvgByStudents.push((avgByStudent / sumGroupAvg).toFixed(2));
-  });
+      return totalGroupPeerAvgByStudent;
+    }
+  );
 
   return totalGroupPeerAvgByStudents;
 };
@@ -127,7 +217,12 @@ const getAdjustedMark = (
   const gradeMin =
     groupProjectMark - settingsAdjustedMarkGrade["maxGradeDecrease"];
 
-  preAdjustedMarkPeerStudents.map((preAdjustedMarkPeerStudent) => {
+  preAdjustedMarkPeerStudents.forEach((preAdjustedMarkPeerStudent) => {
+    if (preAdjustedMarkPeerStudent === "-") {
+      adjustedMarkPeerStudent.push(preAdjustedMarkPeerStudent);
+      return null;
+    }
+
     let gradeAdjusted = null;
 
     if (preAdjustedMarkPeerStudent < gradeMin) {
@@ -148,7 +243,11 @@ const getAdjustedMark = (
       gradeAdjusted = Number(gradeAdjusted);
     }
 
-    adjustedMarkPeerStudent.push(gradeAdjusted.toFixed(2));
+    const sanitisedGradeAdjusted = getRoundedNumber({
+      value: gradeAdjusted.toFixed(2),
+    });
+
+    adjustedMarkPeerStudent.push(sanitisedGradeAdjusted);
   });
 
   if (adjustedMarkPeerStudent.length) {
@@ -179,11 +278,15 @@ const getAdjustedMarkByGroupData = (
   const {
     dataSanitized,
     dataByStudentReviewed,
+    totalSubmission,
+    totalContributions,
+    totalDivisionStudent,
   } = getDataSanitinisedAndDataByStudentReviewed(dataByGroups);
 
-  const avgByStudentIndividually = getAvgByStudentIndividually(
-    dataByStudentReviewed
-  );
+  const avgByStudentIndividually = getAvgByStudentIndividually({
+    dataByStudentReviewed,
+    totalDivisionStudent,
+  });
 
   const { sumGroupAvg, avgByGroup } = getSumAndAvgGroup(
     avgByStudentIndividually
@@ -194,31 +297,38 @@ const getAdjustedMarkByGroupData = (
     sumGroupAvg
   );
 
-  const getPreAdjustedMark = (
-    studentSubmitted,
-    totalGroupPeerAvgByStudents
-  ) => {
-    const totalStudentSubmitted = [...studentSubmitted].length;
-
+  const getPreAdjustedMark = ({
+    totalDivisionStudent,
+    totalGroupPeerAvgByStudents,
+  }) => {
     const preAdjustedMarkPeerStudents = [];
 
-    totalGroupPeerAvgByStudents.map((totalTeamPeerAvgByStudent) => {
-      preAdjustedMarkPeerStudents.push(
-        (
-          totalTeamPeerAvgByStudent *
-          totalStudentSubmitted *
-          groupProjectMark
-        ).toFixed(2)
-      );
+    totalGroupPeerAvgByStudents.forEach((totalTeamPeerAvgByStudent) => {
+      if (totalTeamPeerAvgByStudent === "-") {
+        preAdjustedMarkPeerStudents.push(totalTeamPeerAvgByStudent);
+        return null;
+      }
+
+      const dirtyTotalTeamPeerAvgByStudent = (
+        totalTeamPeerAvgByStudent *
+        totalDivisionStudent *
+        groupProjectMark
+      ).toFixed(2);
+
+      const sanitisedTotalTeamPeerAvgByStudent = getRoundedNumber({
+        value: dirtyTotalTeamPeerAvgByStudent,
+      });
+
+      preAdjustedMarkPeerStudents.push(sanitisedTotalTeamPeerAvgByStudent);
     });
 
     return preAdjustedMarkPeerStudents;
   };
 
-  const preAdjustedMarkPeerStudents = getPreAdjustedMark(
-    studentSubmitted,
-    totalGroupPeerAvgByStudents
-  );
+  const preAdjustedMarkPeerStudents = getPreAdjustedMark({
+    totalDivisionStudent,
+    totalGroupPeerAvgByStudents,
+  });
 
   const adjustedMarkByGroup = getAdjustedMark(
     preAdjustedMarkPeerStudents,
@@ -236,6 +346,8 @@ const getAdjustedMarkByGroupData = (
     preAdjustedMarkPeerStudents,
     adjustedMarkByGroup,
     studentSubmitted,
+    totalSubmission,
+    totalContributions,
   };
 };
 
@@ -255,6 +367,8 @@ const getAdjustedMarkViewByGroup = (
     preAdjustedMarkPeerStudents,
     adjustedMarkByGroup,
     studentSubmitted,
+    totalSubmission,
+    totalContributions,
   } = getAdjustedMarkByGroupData(
     groupName,
     groupProjectMark,
@@ -264,15 +378,19 @@ const getAdjustedMarkViewByGroup = (
 
   const studentsById = getStudentsId(dataStudents);
 
-  const totalStudentSubmissions = getTotalStudentSubmissions(studentSubmitted);
-
   const dataAdjustedMarkView = [];
 
   dataAdjustedMarkView.push(["Group Name", groupName]);
+
   dataAdjustedMarkView.push(["Group Project Mark", groupProjectMark]);
+
   dataAdjustedMarkView.push(["Average by Group", avgByGroup]);
+
   dataAdjustedMarkView.push(["Sum of Group Average", sumGroupAvg]);
-  dataAdjustedMarkView.push(["Total Submissions", totalStudentSubmissions]);
+
+  dataAdjustedMarkView.push(["Total Submissions", totalSubmission]);
+
+  dataAdjustedMarkView.push(["Total Contributions", totalContributions]);
 
   dataAdjustedMarkView.push(["Student Emails", ...studentsByGroup]);
 
@@ -289,29 +407,23 @@ const getAdjustedMarkViewByGroup = (
     "Avg score by student ",
     ...avgByStudentIndividually,
   ]);
+
   dataAdjustedMarkView.push([
     "Student mark/total team",
     ...totalGroupPeerAvgByStudents,
   ]);
+
   dataAdjustedMarkView.push([
     "Preadjusted project mark",
     ...preAdjustedMarkPeerStudents,
   ]);
+
   dataAdjustedMarkView.push(["Adjusted/Final mark", ...adjustedMarkByGroup]);
 
   dataAdjustedMarkView.push([]);
   dataAdjustedMarkView.push([]);
 
   return dataAdjustedMarkView;
-};
-
-const getTotalStudentSubmissions = (studentSubmitted) => {
-  let totalStudentSubmissions = [...studentSubmitted].length;
-  if (totalStudentSubmissions) {
-    return totalStudentSubmissions;
-  }
-
-  return 0;
 };
 
 const getPeerEvaluationDataImported = () => {

@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "publish-project": "clasp push -f"
+    "publish-project": "clasp push -f",
+    "pull": "clasp pull"
   },
   "dependencies": {
     "@google/clasp": "^2.3.0"

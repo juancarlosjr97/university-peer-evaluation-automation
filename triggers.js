@@ -24,6 +24,7 @@ const onOpenMasterSheet = () => {
     )
     .addItem("Get All Peer Evaluation Data", "getAllPeerEvaluationData")
     .addItem("Get Adjusted Marks", "getAdjustedMarks")
+    .addItem("Update Settings", "updateSettings")
     .addItem("Delete Peer-Evaluation files", "deletePeerEvaluationFiles");
 
   centralMenu.addToUi();

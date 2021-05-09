@@ -31,7 +31,7 @@ If you version is the same as the current version specified on the top of the do
 
 <p>&nbsp;</p>
 
->_If you cannot find a `version.gs` it means you are using a version older than 1.1.0 and you can use the tag 1.0.1 as reference for your project._
+> _If you cannot find a `version.gs` it means you are using a version older than 1.1.0 and you can use the tag 1.0.1 as reference for your project._
 
 <p>&nbsp;</p>
 
@@ -64,7 +64,7 @@ The application uses google SMTP because allows to send up to 2000 emails per da
 
 <p>&nbsp;</p>
 
->_It is recommended to create a Google account and do not use the personal as the credentials to be created allow to send emails using that account to whoever have access._
+> _It is recommended to create a Google account and do not use the personal as the credentials to be created allow to send emails using that account to whoever have access._
 
 <p>&nbsp;</p>
 
@@ -72,7 +72,7 @@ Save the app password to be used in the next sections and in the future for mult
 
 ### Part 3. Project Spreadsheet Setup
 
-1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1kacywpWhTB9Ns51YjUjOlSSZ_6Irtu0leeY5K9WI0YM. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
+1. Create a copy of this spreadsheet: https://docs.google.com/spreadsheets/d/1hRDbZp3eDK0T-mKLG_auvxEs5z2YzTr26hKB_93CqWk. To create a copy click on `File` and then on `Make a copy`. The spreadsheet copied contains example data on the `DATA` and `TEAM_GROUP_GRADES` sheets.
 
 2. Update the sheet `DATA` with the correct data of the students, name, email and the student group.
 

@@ -14,13 +14,60 @@ const createAllStudentSheets = () => {
   const dataStudents = getStudentsData();
   const dataStudentsSanitised = dataStudents.slice(1);
 
-  dataStudentsSanitised.forEach((datStudent) => {
-    try {
-      createStudentSheetByStudentEmail(datStudent[1]);
-    } catch (e) {
-      console.log(`Error: ${e} for ${datStudent[1]}`);
-    }
+  const dataStudentsSanitisedSplitByArray = splitArrayOnArrays({
+    originalArray: dataStudentsSanitised,
+    totalByArray: 15,
   });
+
+  const API_ENDPOINT = getEndPointUrl();
+
+  const MAX_REQUEST = 20;
+  let requests = [];
+
+  for (let x = 0; x < dataStudentsSanitisedSplitByArray.length; x++) {
+    const payload = {
+      studentsData: dataStudentsSanitisedSplitByArray[x],
+    };
+
+    const request = {
+      url: API_ENDPOINT,
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify(payload),
+    };
+
+    requests.push(request);
+
+    if (x % MAX_REQUEST == 0 && x > 0) {
+      sleepProcess(5000);
+      UrlFetchApp.fetchAll(requests);
+      requests = [];
+    }
+  }
+
+  if (requests.length) {
+    sleepProcess(5000);
+    UrlFetchApp.fetchAll(requests);
+  }
+};
+
+const splitArrayOnArrays = ({ originalArray, totalByArray }) => {
+  var size = totalByArray;
+  var arrayOfArrays = [];
+
+  for (var i = 0; i < originalArray.length; i += size) {
+    arrayOfArrays.push(originalArray.slice(i, i + size));
+  }
+
+  return arrayOfArrays;
+};
+
+const sleepProcess = (milliseconds) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 };
 
 const createStudentSheetByStudentEmail = (studentEmail) => {
@@ -104,13 +151,14 @@ const createStudentSheetByStudentEmail = (studentEmail) => {
     sendEmail(
       studentsData.studentEmail,
       `Peer evaluation - ${MODULE_NAME}`,
-      `Hi ${studentsData.studentName},
-
-Your peer evaluation sheet is: ${studentsData.studentSheet}
-
-Thanks,
-
-Module ${MODULE_NAME} Automation.`
+      `Hi <i>${studentsData.studentName}</i>,<br>
+        <br>
+      Your peer evaluation sheet is: <a href="${studentsData.studentSheet}">${studentsData.studentSheet}</a>.<br>
+        <br>
+      The deadline to complete the peer evaluation: ${DEADLINE}.<br>
+      Thanks,
+        <br>
+      Module ${MODULE_NAME} Automation.`
     );
   }
 
@@ -119,6 +167,77 @@ Module ${MODULE_NAME} Automation.`
   }
 
   return null;
+};
+
+const updateSettings = () => {
+  protectRangesSpreadsheet({ spreadsheetUrl: MASTER_SPREADSHEET_URL });
+};
+
+const protectRangesSpreadsheet = ({ spreadsheetUrl }) => {
+  removeProtectSpreadsheet({
+    spreadsheetUrl,
+    worksheetName: MASTER_FORM_WORKSHEET_NAME,
+  });
+  const { listOfProtectedRangesString } = getListOfProtectedRangesString();
+
+  protectSpreadsheet({
+    spreadsheetUrl,
+    listOfProtectedRangesString,
+    worksheetName: MASTER_FORM_WORKSHEET_NAME,
+  });
+};
+
+const removeProtectSpreadsheet = ({ spreadsheetUrl, worksheetName }) => {
+  let protectionsByRange = SpreadsheetApp.openByUrl(spreadsheetUrl)
+    .getSheetByName(worksheetName)
+    .getProtections(SpreadsheetApp.ProtectionType.RANGE);
+  removeProtectionDescription({ protections: protectionsByRange });
+};
+
+const removeProtectionDescription = ({ protections }) => {
+  for (let i = 0; i < protections.length; i++) {
+    protections[i].remove();
+  }
+};
+
+const getListOfProtectedRangesString = () => {
+  const data = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL)
+    .getSheetByName(MASTER_WORKSHEET_SETTINGS)
+    .getDataRange()
+    .getValues();
+
+  return {
+    listOfProtectedRangesString: data[3][1],
+  };
+};
+
+const protectSpreadsheet = ({
+  spreadsheetUrl,
+  listOfProtectedRangesString,
+  worksheetName,
+}) => {
+  let sheet = SpreadsheetApp.openByUrl(spreadsheetUrl).getSheetByName(
+    worksheetName
+  );
+
+  const listOfProtectedRanges = listOfProtectedRangesString.split(",");
+  const emailListEditAccess = EMAIL_LIST_EDIT_ACCESS.split(",");
+
+  listOfProtectedRanges.forEach((range) => {
+    protection = sheet.getRange(range);
+
+    protection = protection
+      .protect()
+      .setDescription("Peer Evaluation Protection");
+
+    protection.removeEditors(protection.getEditors());
+
+    if (protection.canDomainEdit()) {
+      protection.setDomainEdit(false);
+    }
+
+    protection.addEditors(emailListEditAccess);
+  });
 };
 
 const setFileSharingToPublic = (file) => {
@@ -196,8 +315,20 @@ const getStudentSheetWithCleanHistory = (tempSheet, newStudentSheetName) => {
   return newSheet;
 };
 
+const getProjectFolderDriveUrl = () => {
+  let folders = DriveApp.getFoldersByName(GOOGLE_DRIVE_FOLDER_NAME);
+  let folder = folders.hasNext() ? folders.next() : null;
+
+  if (folder) {
+    return folder.getUrl();
+  }
+
+  return null;
+};
+
 const getAllSpreadsheetIdsOnProject = () => {
   let folders = DriveApp.getFoldersByName(GOOGLE_DRIVE_FOLDER_NAME);
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
 
   let folder = folders.hasNext() ? folders.next() : null;
 
@@ -208,7 +339,9 @@ const getAllSpreadsheetIdsOnProject = () => {
 
     while (files.hasNext()) {
       var file = files.next();
-      sheetIds.push(file.getId());
+      if (file.getId() !== sheet.getId()) {
+        sheetIds.push(file.getId());
+      }
     }
 
     return sheetIds;
@@ -218,13 +351,15 @@ const getAllSpreadsheetIdsOnProject = () => {
 };
 
 const getAllPeerEvaluationData = () => {
+  updateSettings();
   const sheetIds = getAllSpreadsheetIdsOnProject();
 
   let allDataSheets = [];
 
-  sheetIds.map((sheetId) => {
+  sheetIds.forEach((sheetId) => {
     let sheetData = SpreadsheetApp.openById(sheetId).getDataRange().getValues();
     let sheetDataSanitized = getSheetDataSanitized(sheetData);
+
     allDataSheets.push(...sheetDataSanitized);
   });
 
@@ -232,7 +367,7 @@ const getAllPeerEvaluationData = () => {
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_IMPORTED_DATA);
 
-  importDataSheet.getRange("A2:J").clearContent();
+  importDataSheet.getRange(IMPORTER_DATA_RANGE).clearContent();
 
   if (allDataSheets.length) {
     importDataSheet
@@ -242,13 +377,25 @@ const getAllPeerEvaluationData = () => {
     sendEmail(
       EMAIL_NOTIFICATIONS,
       `Module ${MODULE_NAME} Peer Evaluation completed`,
-      `The module ${MODULE_NAME} has collected all data from the peer evaluation.`
+      `Hello,<br>
+        <br>
+      The module ${MODULE_NAME} has collected all data from the peer evaluation<br>
+        <br>
+      Thanks,
+        <br>
+      Module ${MODULE_NAME} Automation.`
     );
   } else {
     sendEmail(
       EMAIL_NOTIFICATIONS,
       `Module ${MODULE_NAME} Peer Evaluation completed - Empty evaluations`,
-      `The module ${MODULE_NAME} has not data to collect for the peer evaluation of the module.`
+      `Hello,<br>
+        <br>
+      The module ${MODULE_NAME}has not data to collect for the peer evaluation of the module.
+        <br>
+      Thanks,
+        <br>
+      Module ${MODULE_NAME} Automation.`
     );
   }
 
@@ -277,15 +424,18 @@ const sendEmail = (to, subject, body) => {
 };
 
 const getSheetDataSanitized = (sheetData) => {
-  let date = sheetData[0][1];
-  let studentEmail = sheetData[1][1];
-  let groupName = sheetData[3][1];
+  const date = sheetData[0][1];
+  const studentEmail = sheetData[1][1];
+  const groupName = sheetData[3][1];
+  const comment = sheetData[2][8];
 
   let dataReview = [];
 
   for (x = FIRST_ROW_STUDENT_DATA - 1; x < sheetData.length; x++) {
-    if (sheetData[x][0].length) {
-      let row = [date, studentEmail, groupName, ...sheetData[x]];
+    if (sheetData[x][0].toString().length) {
+      let row = [date, studentEmail, groupName, comment, ...sheetData[x]];
+      row.pop();
+      row.pop();
       dataReview.push(row);
     }
   }
@@ -340,7 +490,39 @@ const deletePeerEvaluationFiles = () => {
     MASTER_SPREADSHEET_URL
   ).getSheetByName(MASTER_WORKSHEET_DATA);
 
-  masterSheet.getRange("E2:E").clearContent();
+  masterSheet.getRange("D2:D").clearContent();
+};
+
+const moveMasterToProjectFolder = () => {
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL);
+
+  let file = DriveApp.getFileById(sheet.getId());
+  let folderId = null;
+
+  try {
+    let folders = DriveApp.getFoldersByName(GOOGLE_DRIVE_FOLDER_NAME);
+    folderId = folders.next();
+  } catch (err) {
+    folderId = DriveApp.createFolder(GOOGLE_DRIVE_FOLDER_NAME);
+  }
+
+  file.moveTo(folderId);
+};
+
+const sendEmailOnAppSetup = ({ newDeploymentURL, projectFolderDriveUrl }) => {
+  sendEmail(
+    EMAIL_NOTIFICATIONS,
+    `Web app created successfully - ${GOOGLE_DRIVE_FOLDER_NAME}`,
+    `Hi, <br>
+      <br>
+    The web app URL is: <a href="${newDeploymentURL}">${newDeploymentURL}</a>.<br>
+      <br>
+    The Google Drive Folder of the project is: <a href="${projectFolderDriveUrl}">${projectFolderDriveUrl}</a>.<br>
+      <br>
+    Thanks,
+      <br>
+    Module ${MODULE_NAME} Automation.`
+  );
 };
 
 const getTodayDate = () => {
@@ -351,4 +533,46 @@ const doGet = () => {
   let htmlOutput = HtmlService.createTemplateFromFile("web-app").evaluate();
   htmlOutput.addMetaTag("viewport", "width=device-width, initial-scale=1");
   return htmlOutput;
+};
+
+const saveEndPointUrl = ({ newDeploymentURL }) => {
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL).getSheetByName(
+    MASTER_WORKSHEET_SYSTEM_DATA
+  );
+
+  sheet.getRange(ENDPOINT_CELL).setValue(newDeploymentURL);
+};
+
+const getEndPointUrl = () => {
+  let sheet = SpreadsheetApp.openByUrl(MASTER_SPREADSHEET_URL).getSheetByName(
+    MASTER_WORKSHEET_SYSTEM_DATA
+  );
+
+  const data = sheet.getRange(ENDPOINT_CELL).getValues();
+
+  return data[0][0];
+};
+
+const doPost = (e) => {
+  const response = { result: "success" };
+
+  const { studentsData } = JSON.parse(e.postData.contents);
+
+  studentsData.forEach((student) => {
+    try {
+      createStudentSheetByStudentEmail(student[1]);
+    } catch (e) {
+      console.error(`Error: ${e} for ${student[1]}`);
+
+      sendEmail(
+        EMAIL_ON_ERROR,
+        `Error - Creating Sheet`,
+        `Error: ${e} for ${student[1]}`
+      );
+    }
+  });
+
+  return ContentService.createTextOutput(JSON.stringify(response)).setMimeType(
+    ContentService.MimeType.JSON
+  );
 };
