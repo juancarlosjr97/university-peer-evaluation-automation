@@ -120,6 +120,7 @@ const getDataSanitinisedAndDataByStudentReviewed = (dataByGroups) => {
 };
 
 const getRoundedNumber = ({ value }) => {
+  return value;
   const valueNumber = typeof value === "string" ? value.toString() : value;
 
   return Math.round(valueNumber);
@@ -167,7 +168,7 @@ const getSumAndAvgGroup = (avgByStudentIndividually) => {
 
   return {
     sumGroupAvg,
-    avgByGroup: avgByGroup.toFixed(2),
+    avgByGroup: avgByGroup,
   };
 };
 
@@ -180,9 +181,7 @@ const getTotalGroupPeerAvgByStudents = (
       if (avgByStudent === "-") {
         return "-";
       }
-      const totalGroupPeerAvgByStudent = (avgByStudent / sumGroupAvg).toFixed(
-        2
-      );
+      const totalGroupPeerAvgByStudent = avgByStudent / sumGroupAvg;
 
       return totalGroupPeerAvgByStudent;
     }
@@ -244,7 +243,7 @@ const getAdjustedMark = (
     }
 
     const sanitisedGradeAdjusted = getRoundedNumber({
-      value: gradeAdjusted.toFixed(2),
+      value: gradeAdjusted,
     });
 
     adjustedMarkPeerStudent.push(sanitisedGradeAdjusted);
@@ -267,13 +266,8 @@ const getAdjustedMarkByGroupData = (
 ) => {
   const studentsByGroup = getStudentsByGroup(dataStudents, groupName);
 
-  const {
-    studentSubmitted,
-    dataByGroups,
-  } = getStudentsSubmittedAndDataByGroups(
-    peerEvaluationDataImported,
-    groupName
-  );
+  const { studentSubmitted, dataByGroups } =
+    getStudentsSubmittedAndDataByGroups(peerEvaluationDataImported, groupName);
 
   const {
     dataSanitized,
@@ -285,7 +279,7 @@ const getAdjustedMarkByGroupData = (
 
   const avgByStudentIndividually = getAvgByStudentIndividually({
     dataByStudentReviewed,
-    totalDivisionStudent,
+    totalDivisionStudent: totalSubmission,
   });
 
   const { sumGroupAvg, avgByGroup } = getSumAndAvgGroup(
@@ -309,11 +303,8 @@ const getAdjustedMarkByGroupData = (
         return null;
       }
 
-      const dirtyTotalTeamPeerAvgByStudent = (
-        totalTeamPeerAvgByStudent *
-        totalDivisionStudent *
-        groupProjectMark
-      ).toFixed(2);
+      const dirtyTotalTeamPeerAvgByStudent =
+        totalTeamPeerAvgByStudent * totalDivisionStudent * groupProjectMark;
 
       const sanitisedTotalTeamPeerAvgByStudent = getRoundedNumber({
         value: dirtyTotalTeamPeerAvgByStudent,
