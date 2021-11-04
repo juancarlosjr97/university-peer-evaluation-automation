@@ -10,12 +10,28 @@ const removeFileById = (fileId) => {
   DriveApp.getFileById(fileId).setTrashed(true);
 };
 
+const checkSheetHasBeenCreated = (studentsData) => {
+  for (index in studentsData) {
+    if (studentsData[index][3].length) {
+      delete studentsData[index];
+    }
+  }
+
+  const filtered = studentsData.filter((value, index, arr) => {
+    return value !== undefined;
+  });
+
+  return filtered;
+};
+
 const createAllStudentSheets = () => {
   const dataStudents = getStudentsData();
   const dataStudentsSanitised = dataStudents.slice(1);
 
+  const studentsWithoutSheet = checkSheetHasBeenCreated(dataStudentsSanitised);
+
   const dataStudentsSanitisedSplitByArray = splitArrayOnArrays({
-    originalArray: dataStudentsSanitised,
+    originalArray: studentsWithoutSheet,
     totalByArray: 15,
   });
 
@@ -216,9 +232,8 @@ const protectSpreadsheet = ({
   listOfProtectedRangesString,
   worksheetName,
 }) => {
-  let sheet = SpreadsheetApp.openByUrl(spreadsheetUrl).getSheetByName(
-    worksheetName
-  );
+  let sheet =
+    SpreadsheetApp.openByUrl(spreadsheetUrl).getSheetByName(worksheetName);
 
   const listOfProtectedRanges = listOfProtectedRangesString.split(",");
   const emailListEditAccess = EMAIL_LIST_EDIT_ACCESS.split(",");
